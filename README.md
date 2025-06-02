@@ -1,4 +1,4 @@
-# 🚪 DoorStepFix
+# 🚪 InstantFix
 
 **Your Trusted Home Appliance Service Platform – Book AC Cleaning, Repairs & More at Your Doorstep**
 
@@ -6,7 +6,7 @@
 
 ## 🏡 About
 
-**DoorStepFix** is a modern home service platform that seamlessly connects customers with certified technicians for cleaning, maintenance, and repair of home appliances — all from the comfort of your home. Whether it’s an AC, refrigerator, washing machine, or any other appliance, we ensure fast, reliable, and professional service.
+**InstantFix** is a modern home service platform that seamlessly connects customers with certified technicians for cleaning, maintenance, and repair of home appliances — all from the comfort of your home. Whether it’s an AC, refrigerator, washing machine, or any other appliance, we ensure fast, reliable, and professional service.
 
 ---
 
@@ -44,8 +44,8 @@
 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/yourusername/doorstepfix.git
-cd doorstepfix
+git clone https://github.com/whomimohshukla/InstantFix
+cd InstantFix
 ```
 
 2. **Install Dependencies**
@@ -60,7 +60,7 @@ Create a `.env` file in the root directory:
 
 ```env
 PORT=3000
-MONGODB_URI=mongodb://localhost:27017/doorstepfix
+MONGODB_URI=mongodb://localhost:27017/InstantFix
 JWT_SECRET=your_jwt_secret_key
 RAZORPAY_KEY_ID=your_razorpay_key
 RAZORPAY_KEY_SECRET=your_razorpay_secret
@@ -81,7 +81,7 @@ npm start
 ## 📁 Project Structure
 
 ```
-doorstepfix/
+InstantFix/
 ├── models/            # Mongoose schemas
 │   ├── User.js
 │   ├── Service.js
@@ -144,8 +144,8 @@ This project is licensed under the [MIT License](LICENSE).
 ## 📞 Contact
 
 For queries, feature requests, or support, please reach out at:
-📧 **[support@doorstepfix.com](mailto:support@doorstepfix.com)**
+📧 **[support@InstantFix.com](mailto:support@doorstepfix.com)**
 
 ---
 
-**DoorStepFix** – Your trusted partner for fast, safe, and reliable appliance services right at your doorstep! 🛠️🏠✨
+**InstantFix** – Your trusted partner for fast, safe, and reliable appliance services right at your doorstep! 🛠️🏠✨
