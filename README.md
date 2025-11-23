@@ -220,6 +220,137 @@ Tracks booking, service, technician, financial, geographic, and customer KPIs on
 
 ---
 
+## 🌐 Website Flow Diagram
+
+```mermaid
+flowchart LR
+  L[Landing/Home] --> S[Select Service]
+  S --> B[Booking Form]
+  B --> U[Upload Photos/Notes]
+  U --> Q[Quote (MVP: fixed)]
+  Q --> P[Payment Intent]
+  P --> C[Booking Confirmed]
+  C --> T[Technician Assignment]
+  T --> ETA[Live ETA + Tracking]
+  ETA --> WIP[Work In Progress]
+  WIP --> D[Job Done]
+  D --> R[Rate & Review]
+  R --> H[History/Invoices]
+
+  L --> A[Login/Signup] --> DSH[Dashboard]
+  DSH --> H
+  DSH --> "Support/Chat"
+```
+
+## 👥 Dashboards by Role
+
+### Customer Dashboard
+- **Bookings**
+  - Create new booking
+  - View upcoming/past bookings
+  - Reschedule/cancel (within policy)
+- **Live Tracking**
+  - Technician ETA, contact, status updates
+- **Payments**
+  - Pay balance, download invoices
+  - Save payment methods (if supported)
+- **Media & Notes**
+  - Upload issue photos/videos
+- **Support**
+  - Chat, FAQs, ticketing
+- **Profile**
+  - Addresses, preferences, notifications
+- **Reviews**
+  - Rate completed jobs, view history
+
+### Technician Dashboard
+- **Jobs**
+  - Available jobs (accept/decline)
+  - Today’s route and schedule
+  - Job details, customer contact, notes
+- **On-site Workflow**
+  - Check-in/out
+  - Add parts used
+  - Mark statuses (enroute, arrived, completed)
+  - Upload before/after media
+- **Earnings**
+  - Daily/weekly payouts, incentives
+- **Profile & Compliance**
+  - Skills, documents/KYC, background check status
+  - Availability toggle (online/offline)
+- **Support**
+  - Ops chat, SOPs/guide access
+
+### Admin/Ops Dashboard
+- **Overview**
+  - Metrics: new bookings, in-progress, completion rate, SLAs
+- **Bookings**
+  - Create/edit bookings, reassign technician
+  - Escalations and disputes handling
+- **Technicians**
+  - Approvals, documents, ratings, service areas
+- **Pricing & Catalog**
+  - Manage categories/services, base prices
+- **Payments**
+  - Refunds, disputes, payout reconciliation
+- **Notifications**
+  - Broadcasts, templates, delivery status
+- **Compliance & Fraud**
+  - Flags, audit logs, device/geo checks
+- **Content/KB**
+  - Troubleshooting guides for AI/Support
+- **Feature Flags**
+  - Toggle experiments, rollout controls
+
+## 🔐 Role Permissions (Summary)
+- **Customer**
+  - Create/manage own bookings, pay, track, review, manage addresses/profile
+- **Technician**
+  - View/accept assigned jobs, update job status, upload media, manage availability/profile, view earnings
+- **Admin/Ops**
+  - Manage all bookings, technicians, pricing, refunds, notifications, flags, and platform settings
+
+## 🧭 Mermaid: Role Navigation Overview
+```mermaid
+flowchart TB
+  subgraph Customer
+    C1[Dashboard]
+    C2[Book Service]
+    C3[Track Order]
+    C4[Payments & Invoices]
+    C5[Reviews]
+    C6[Profile & Addresses]
+  end
+
+  subgraph Technician
+    T1[Job Queue]
+    T2[Today's Schedule]
+    T3[Job Detail & Status]
+    T4[Earnings]
+    T5[Availability]
+    T6[Documents/KYC]
+  end
+
+  subgraph Admin_Ops
+    A1[Ops Overview]
+    A2[Bookings Admin]
+    A3[Technicians Admin]
+    A4[Pricing & Catalog]
+    A5[Payments & Refunds]
+    A6[Notifications]
+    A7[Fraud/Compliance]
+    A8[KB & Feature Flags]
+  end
+```
+
+## 🔁 System Flow Touchpoints
+- Booking creation → Payment intent → Confirmation → Dispatch → Live tracking → Completion → Review
+- Admin override on assignment and pricing
+- Technician status changes drive customer notifications
+- Webhooks (payments) update booking/payment states
+
+---
+
 ## 🤝 Contributing
 
 ```bash
