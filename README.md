@@ -1,5 +1,5 @@
-# 🚪 InstantFix
 
+# 🚪 InstantFix  
 **Your Trusted Home Appliance Service Platform – Book AC Cleaning, Repairs & More at Your Doorstep**
 
 ---
@@ -12,6 +12,7 @@
 
 ## ✨ Core Features
 
+<<<<<<< HEAD
 * 🔧 **Service Coverage** – AC, refrigeration, washing machines, RO, electricals, and more
 * 👷 **Verified Pros** – Background checks, KYC, certifications, on-site check-in/out
 * 📱 **Frictionless Booking** – Issue capture with media upload, preferred slot selection
@@ -21,11 +22,20 @@
 * 🧾 **Transparent Pricing** – Itemized labor + parts estimate with price-lock option
 * 🛠️ **Parts Handling** – Catalog, availability check, and reservation workflows
 * 🔔 **Notifications** – Email/SMS/Push for booking, dispatch, arrival, and completion
+=======
+- 🔧 **Wide Range of Services** – AC cleaning, fridge maintenance, washing machine repairs, and more  
+- 👷 **Verified Technicians** – Thoroughly background-checked and trained professionals  
+- 📱 **Easy Online Booking** – Schedule a service in just a few taps  
+- 💳 **Multiple Payment Options** – Pay via UPI, credit/debit cards, or cash on delivery  
+- 📍 **Live Technician Tracking** – Monitor real-time technician location and ETA  
+- ⭐ **Ratings & Reviews** – Quality assurance through customer feedback  
+>>>>>>> 4666d8564353a932ff302a731ec644dcb5e38333
 
 ---
 
 ## 🤖 Advanced & AI Features
 
+<<<<<<< HEAD
 * 🧠 **AI Intake & Triage** – Image/video understanding to classify issues and severity
 * 💰 **Dynamic Pricing** – AI estimates with confidence scores and human review fallback
 * 📦 **Parts Intelligence** – Part recognition from images; nearby inventory lookup
@@ -51,6 +61,13 @@
 * **Infra:** Docker, AWS ECS Fargate (or EKS), Terraform IaC, GitHub Actions CI/CD
 * **Observability:** OpenTelemetry, Prometheus/Grafana, CloudWatch, Sentry
 * **Security:** AWS Secrets Manager/SSM, KMS encryption, WAF/Shield
+=======
+- **Backend:** Node.js, Express.js  
+- **Database:** MongoDB with Mongoose ODM  
+- **Authentication:** JWT + bcrypt  
+- **Payments:** Razorpay & Stripe  
+- **Notifications:** Email, SMS, Push Notifications  
+>>>>>>> 4666d8564353a932ff302a731ec644dcb5e38333
 
 ---
 
@@ -58,34 +75,34 @@
 
 ### 📦 Prerequisites
 
+<<<<<<< HEAD
 * Node.js (v18 or later)
 * Postgres (local or cloud instance)
 * Redis (for cache/sessions)
 * Docker (optional for local stack)
 * Kafka (optional for events in local dev)
 * npm or yarn
+=======
+- Node.js (v18 or later)  
+- MongoDB (local or cloud)  
+- npm or yarn  
+>>>>>>> 4666d8564353a932ff302a731ec644dcb5e38333
 
 ### 📥 Installation
-
-1. **Clone the Repository**
 
 ```bash
 git clone https://github.com/whomimohshukla/InstantFix
 cd InstantFix
-```
-
-2. **Install Dependencies**
-
-```bash
 npm install
 ```
 
-3. **Configure Environment Variables**
+### 🔐 Environment Setup
 
 Create a `.env` file in the root directory:
 
 ```env
 PORT=3000
+<<<<<<< HEAD
 DATABASE_URL=postgresql://user:password@localhost:5432/instantfix?schema=public
 JWT_SECRET=your_jwt_secret_key
 
@@ -98,17 +115,21 @@ AWS_REGION=ap-south-1
 AWS_S3_BUCKET=instantfix-media
 STRIPE_SECRET_KEY=sk_test_xxx
 STRIPE_WEBHOOK_SECRET=whsec_xxx
+=======
+MONGODB_URI=mongodb://localhost:27017/InstantFix
+JWT_SECRET=your_jwt_secret
+>>>>>>> 4666d8564353a932ff302a731ec644dcb5e38333
 RAZORPAY_KEY_ID=your_razorpay_key
 RAZORPAY_KEY_SECRET=your_razorpay_secret
 ```
 
-4. **Start the Application**
+### 🟢 Run the Application
 
 ```bash
-# For development
+# Development
 npm run dev
 
-# For production
+# Production
 npm start
 ```
 
@@ -119,11 +140,6 @@ npm start
 ```
 InstantFix/
 ├── models/            # Mongoose schemas
-│   ├── User.js
-│   ├── Service.js
-│   ├── Technician.js
-│   ├── Booking.js
-│   └── Payment.js
 ├── routes/            # Route handlers
 ├── controllers/       # Business logic and APIs
 ├── middleware/        # Auth, validation, etc.
@@ -137,25 +153,60 @@ InstantFix/
 
 ### 🔐 Authentication
 
-* `POST /api/auth/register` – Register a new user
-* `POST /api/auth/login` – User login
+- `POST /api/auth/register` – Register a new user  
+- `POST /api/auth/login` – User login  
 
 ### 🧰 Services
 
-* `GET /api/services` – List all available services
-* `GET /api/services/:id` – Get details of a specific service
+- `GET /api/services` – List all services  
+- `GET /api/services/:id` – Service details  
 
 ### 🗓 Bookings
 
-* `POST /api/bookings` – Create a new service booking
-* `GET /api/bookings` – Get user-specific bookings
-* `PUT /api/bookings/:id` – Update the status of a booking
+- `POST /api/bookings` – Book a service  
+- `GET /api/bookings` – Get user bookings  
+- `PUT /api/bookings/:id` – Update booking status  
 
 ### 💳 Payments
 
-* `POST /api/payments/initiate` – Start a payment transaction
-* `POST /api/payments/verify` – Verify and complete a payment
+- `POST /api/payments/initiate` – Start payment  
+- `POST /api/payments/verify` – Verify payment  
 
+---
+
+## 🧬 Mongoose Models Overview
+
+### 📘 `User.js`
+Stores user details, roles (customer, technician, admin), addresses, preferences, loyalty, devices, and security.  
+Includes hashed passwords, verification, and referral tracking.
+
+### 👷 `Technician.js`
+Stores professional data, schedule, tools, location, skills, documents, earnings, and performance metrics.
+
+### 🧰 `Service.js`
+Manages service categories, pricing, appliance compatibility, media, and membership discounts.  
+Also includes time estimates and SEO fields.
+
+### 🗓 `Booking.js`
+Handles full service lifecycle: customer, technician, time, address, pricing, status, feedback, and cancellation.
+
+### 💳 `Payment.js`
+Stores payment metadata, gateway info, refunds, amount breakdowns, and validation for Razorpay, Stripe, UPI, etc.
+
+### 📍 `Tracking.js`
+Tracks technician location (GPS), routes, geofencing, and live status updates.
+
+### 🔔 `Notification.js`
+Manages notifications by type, content, delivery channel, audience, and delivery status tracking.
+
+### 🏷 `Coupon.js`
+Manages discount codes, usage limits, targeted users/services, geo-filters, and history.
+
+### 📦 `Inventory.js`
+Stores stock data for tools/spare parts with compatibility, location, vendor, pricing, and reorder alerts.
+
+### 📊 `Analytics.js`
+Tracks booking, service, technician, financial, geographic, and customer KPIs on a daily/weekly/monthly basis.
 
 ## 🚀 Enhancements to Stand Out
 
@@ -171,26 +222,26 @@ InstantFix/
 
 ## 🤝 Contributing
 
-We welcome contributions from the community:
-
+```bash
 1. Fork the repo
-2. Create a feature branch: `git checkout -b feature/awesome-feature`
-3. Commit your changes: `git commit -m "Add awesome feature"`
-4. Push to the branch: `git push origin feature/awesome-feature`
-5. Open a pull request 🚀
+2. Create a feature branch: git checkout -b feature/your-feature
+3. Commit changes: git commit -m "Add your feature"
+4. Push: git push origin feature/your-feature
+5. Create a pull request 🚀
+```
 
 ---
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+Licensed under the [MIT License](LICENSE)
 
 ---
 
 ## 📞 Contact
 
-For queries, feature requests, or support, please reach out at:
-📧 **[support@InstantFix.com](mailto:support@doorstepfix.com)**
+For queries, feedback, or support:  
+📧 [support@InstantFix.com](mailto:support@InstantFix.com)
 
 ---
 
