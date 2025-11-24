@@ -120,10 +120,14 @@ model User {
 }
 
 model CustomerProfile {
-  id      String @id @default(cuid())
-  userId  String @unique
-  user    User   @relation(fields: [userId], references: [id])
-  loyalty Int    @default(0)
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id])
+  loyalty          Int      @default(0)
+  avatarUrl        String?
+  preferences      Json?
+  defaultAddressId String?
+  defaultAddress   Address? @relation(fields: [defaultAddressId], references: [id])
 }
 
 /**
@@ -157,19 +161,20 @@ model TechnicianProfile {
  * ===== Address & Location =====
  */
 model Address {
-  id         String    @id @default(cuid())
-  userId     String
-  user       User      @relation(fields: [userId], references: [id])
-  label      String?
-  line1      String
-  line2      String?
-  city       String
-  state      String
-  postalCode String
-  lat        Float?
-  lng        Float?
-  isDefault  Boolean   @default(false)
-  bookings   Booking[]
+  id               String            @id @default(cuid())
+  userId           String
+  user             User              @relation(fields: [userId], references: [id])
+  label            String?
+  line1            String
+  line2            String?
+  city             String
+  state            String
+  postalCode       String
+  lat              Float?
+  lng              Float?
+  isDefault        Boolean           @default(false)
+  bookings         Booking[]
+  customerProfiles CustomerProfile[]
 }
 
 /**

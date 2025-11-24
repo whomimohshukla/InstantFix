@@ -5,7 +5,12 @@ import dotenv from "dotenv";
 import { prisma } from "./lib/prisma";
 import { authRouter } from "./routes/auth.routes";
 import { technicianRouter } from "./routes/technician.routes";
-
+import { catalogRouter } from "./routes/catalog.routes";
+import { addressRouter } from "./routes/address.routes";
+import { bookingRouter } from "./routes/booking.routes";
+import { geoRouter } from "./routes/geo.routes";
+import { locationRouter } from "./routes/location.routes";
+import { profileRouter } from "./routes/profile.routes";
 dotenv.config();
 const PORT = process.env.PORT || 8000;
 
@@ -27,7 +32,12 @@ app.get("/health/db", async (_req, res) => {
 // Mount routes
 app.use("/auth", authRouter);
 app.use("/technician", technicianRouter);
-
+app.use("/catalog", catalogRouter);
+app.use("/me", addressRouter);
+app.use("/me", profileRouter);
+app.use("/bookings", bookingRouter);
+app.use("/geo", geoRouter);
+app.use("/location", locationRouter);
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

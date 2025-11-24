@@ -1,0 +1,156 @@
+{
+  "info": {
+    "name": "InstantFix",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        { "name": "Service Up", "request": { "method": "GET", "url": "{{base_url}}/health" } },
+        { "name": "DB Up", "request": { "method": "GET", "url": "{{base_url}}/health/db" } }
+      ]
+    },
+    {
+      "name": "Authorization",
+      "item": [
+        {
+          "name": "Signup (role optional)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Secret#123\",\n  \"name\": \"User\",\n  \"phone\": \"+911234567890\",\n  \"role\": \"CUSTOMER\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": {"type":"text/javascript","exec":[
+              "pm.test('Status is 201 or 409', function () { pm.expect([201,409]).to.include(pm.response.code); });",
+              "if (pm.response.code === 201) { const json = pm.response.json(); pm.expect(json.ok).to.eql(true); }"
+            ]}
+          }]
+        },
+        {
+          "name": "Verify Email OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/verify-otp",
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"user@example.com\",\n  \"otp\": \"123456\"\n}" }
+          },
+          "event": [{"listen":"test","script":{"type":"text/javascript","exec":[
+            "pm.test('Status is 200 or 400', function () { pm.expect([200,400]).to.include(pm.response.code); });"
+          ]}}]
+        },
+        {
+          "name": "Resend Email OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/resend-otp",
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"user@example.com\"\n}" }
+          },
+          "event": [{"listen":"test","script":{"type":"text/javascript","exec":[
+            "pm.test('Status is 200 or 429', function () { pm.expect([200,429]).to.include(pm.response.code); });"
+          ]}}]
+        },
+        {
+          "name": "Login (email/password, optional role)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/login",
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Secret#123\",\n  \"role\": \"CUSTOMER\"\n}" }
+          },
+          "event": [{"listen":"test","script":{"type":"text/javascript","exec":[
+            "pm.test('Login status is 200 or 401 or 403', function () { pm.expect([200,401,403]).to.include(pm.response.code); });",
+            "if (pm.response.code === 200) { const json = pm.response.json(); pm.environment.set('token', json.token); pm.test('Token saved', function () { pm.expect(!!json.token).to.eql(true); }); }"
+          ]}}]
+        },
+        {
+          "name": "Availability (email/phone)",
+          "request": { "method": "GET", "url": "{{base_url}}/auth/availability?email=user@example.com&phone=%2B911234567890" }
+        },
+        {
+          "name": "Phone: Send OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/phone/send-otp",
+            "body": { "mode": "raw", "raw": "{\n  \"phone\": \"+911234567890\"\n}" }
+          },
+          "event": [{"listen":"test","script":{"type":"text/javascript","exec":[
+            "pm.test('Status is 200 or 404', function () { pm.expect([200,404]).to.include(pm.response.code); });"
+          ]}}]
+        },
+        {
+          "name": "Phone: Verify OTP (returns JWT)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/phone/verify-otp",
+            "body": { "mode": "raw", "raw": "{\n  \"phone\": \"+911234567890\",\n  \"otp\": \"123456\"\n}" }
+          },
+          "event": [{"listen":"test","script":{"type":"text/javascript","exec":[
+            "pm.test('Status is 200 or 400 or 404', function () { pm.expect([200,400,404]).to.include(pm.response.code); });",
+            "if (pm.response.code === 200) { const json = pm.response.json(); pm.environment.set('token', json.token); }"
+          ]}}]
+        },
+        {
+          "name": "Phone: Resend OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/phone/resend-otp",
+            "body": { "mode": "raw", "raw": "{\n  \"phone\": \"+911234567890\"\n}" }
+          },
+          "event": [{"listen":"test","script":{"type":"text/javascript","exec":[
+            "pm.test('Status is 200 or 429', function () { pm.expect([200,429]).to.include(pm.response.code); });"
+          ]}}]
+        }
+      ]
+    },
+    {
+      "name": "Customer",
+      "item": [
+        { "name": "Catalog: Categories", "request": { "method": "GET", "url": "{{base_url}}/catalog/categories" } },
+        { "name": "Catalog: Services (by categoryId)", "request": { "method": "GET", "url": "{{base_url}}/catalog/services?categoryId={{categoryId}}" } },
+        { "name": "Addresses: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/me/addresses" } },
+        { "name": "Addresses: Create", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/me/addresses", "body": {"mode":"raw","raw":"{\n  \"label\": \"Home\",\n  \"line1\": \"123 Street\",\n  \"city\": \"City\",\n  \"state\": \"State\",\n  \"postalCode\": \"123456\",\n  \"isDefault\": true\n}" } } },
+        { "name": "Addresses: Update", "request": { "method": "PATCH", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/me/addresses/{{addressId}}", "body": {"mode":"raw","raw":"{\n  \"label\": \"Home 2\"\n}" } } },
+        { "name": "Addresses: Delete", "request": { "method": "DELETE", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/me/addresses/{{addressId}}" } },
+        { "name": "Bookings: Create", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/bookings", "body": {"mode":"raw","raw":"{\n  \"serviceId\": \"{{serviceId}}\",\n  \"addressId\": \"{{addressId}}\",\n  \"scheduledAt\": null,\n  \"notes\": \"Please come after 6 PM\"\n}" } } },
+        { "name": "Bookings: List Mine", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/bookings/me" } },
+        { "name": "Bookings: Get Mine by Id", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/bookings/me/{{bookingId}}" } }
+      ]
+    },
+    {
+      "name": "Technician",
+      "item": [
+        { "name": "Onboarding: Status", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/onboarding/status" } },
+        { "name": "Onboarding: Update", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/technician/onboarding/update", "body": {"mode":"raw","raw":"{\n  \"headline\": \"AC Specialist\",\n  \"yearsExperience\": 5,\n  \"skills\": [\"AC\"],\n  \"hasVehicle\": true\n}" } } }
+      ]
+    },
+    {
+      "name": "Geo & Location",
+      "item": [
+        { "name": "Geocode Address", "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/geo/geocode", "body": {"mode":"raw","raw":"{\n  \"q\": \"HSR Layout, Bengaluru\"\n}" } } },
+        { "name": "Reverse Geocode", "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/geo/reverse", "body": {"mode":"raw","raw":"{\n  \"lat\": 12.91,\n  \"lng\": 77.64\n}" } } },
+        { "name": "Update My Location", "request": { "method": "PUT", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/location/me/location", "body": {"mode":"raw","raw":"{\n  \"lat\": 12.91,\n  \"lng\": 77.64,\n  \"accuracy\": 8\n}" } } },
+        { "name": "Get Technician Location", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/location/technician/{{technicianUserId}}/location" } }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:4000" },
+    { "key": "token", "value": "" },
+    { "key": "categoryId", "value": "" },
+    { "key": "serviceId", "value": "" },
+    { "key": "addressId", "value": "" },
+    { "key": "bookingId", "value": "" },
+    { "key": "technicianUserId", "value": "" }
+  ]
+}
