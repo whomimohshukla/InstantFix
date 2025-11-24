@@ -6,6 +6,8 @@ import jwt from "jsonwebtoken";
 
 const OTP_TTL_SECONDS = 5 * 60; // 5 minutes
 const RESEND_LIMIT = 5; // per hour
+const APP_NAME = process.env.APP_NAME || "InstantFix";
+const OTP_MINUTES = Math.floor(OTP_TTL_SECONDS / 60);
 
 function otpKey(phone: string) {
   return `otp:sms:${phone}`;
@@ -22,7 +24,7 @@ async function sendSmsOTP(phone: string, otp: string) {
   await plivoClient.messages.create(
     plivoFrom,
     phone,
-    `Your InstantFix OTP is ${otp}. Valid for 5 minutes.`
+    `${APP_NAME} code: ${otp}. Expires in ${OTP_MINUTES}m. Do not share this code.`
   );
 }
 

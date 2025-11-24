@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { userRepo } from "../repositories/user.repo";
+import { prisma } from "../lib/prisma";
+import transporter, { mailFrom } from "../config/mailer";
 import {
   issueOTP,
   verifyOTP as verifyOtpSvc,
@@ -36,9 +38,9 @@ export async function signup({
   if (existing)
     return { ok: false, status: 409, message: "Email already registered" };
 
-  // Prevent public signup as ADMIN
-  if (role === "ADMIN") {
-    return { ok: false, status: 400, message: "Invalid role for signup" };
+  // Prevent public signup as ADMIN unless explicitly allowed via env toggle
+  if (role === "ADMIN" && process.env.ALLOW_ADMIN_SIGNUP !== "1") {
+    return { ok: false, status: 400, message: "Admin signup disabled" };
   }
 
   if (phoneNorm) {
@@ -118,10 +120,14 @@ export async function login({
   email,
   password,
   role,
+  ip,
+  userAgent,
 }: {
   email: string;
   password: string;
   role?: "CUSTOMER" | "TECHNICIAN" | "ADMIN";
+  ip?: string | null;
+  userAgent?: string | null;
 }) {
   const user = await userRepo.findByEmail(email);
   if (!user) return { ok: false, status: 401, message: "Invalid credentials" };
@@ -143,5 +149,51 @@ export async function login({
       expiresIn: "7d",
     }
   );
+
+  // Fire-and-forget: record login activity and notify via email
+  const when = new Date();
+  try {
+    await prisma.loginActivity.create({
+      data: {
+        userId: user.id,
+        ip: ip || null,
+        userAgent: userAgent || null,
+        createdAt: when,
+      },
+    });
+  } catch {}
+
+  try {
+    const appName = process.env.APP_NAME || "InstantFix";
+    const subject = `New ${appName} login`;
+    const text = `A new login to your ${appName} account was detected.\n\nTime: ${when.toISOString()}\nIP: ${ip || "unknown"}\nDevice: ${userAgent || "unknown"}\n\nIf this wasn't you, please reset your password.`;
+    const html = `
+      <div style="background:#f6f8fb;padding:24px;font-family:Inter,Segoe UI,Arial,sans-serif;color:#0f172a;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+          <tr>
+            <td style="padding:20px 24px;border-bottom:1px solid #f1f5f9;">
+              <div style="font-size:16px;font-weight:600;color:#111827;">${appName}</div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px;">
+              <h1 style="margin:0 0 8px 0;font-size:18px;color:#111827;">New login detected</h1>
+              <p style="margin:0 0 8px 0;font-size:14px;color:#334155;">We noticed a login to your account.</p>
+              <ul style="margin:8px 0 16px 20px;padding:0;font-size:14px;color:#334155;">
+                <li><b>Time:</b> ${when.toISOString()}</li>
+                <li><b>IP:</b> ${ip || "unknown"}</li>
+                <li><b>Device:</b> ${userAgent || "unknown"}</li>
+              </ul>
+              <p style="margin:0;font-size:12px;color:#64748b;">If this wasn’t you, please reset your password immediately.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:12px 24px;background:#f8fafc;border-top:1px solid #f1f5f9;font-size:12px;color:#64748b;">© ${when.getFullYear()} ${appName}</td>
+          </tr>
+        </table>
+      </div>`;
+    await transporter.sendMail({ from: mailFrom, to: user.email, subject, text, html });
+  } catch {}
+
   return { ok: true, status: 200, token, data: user };
 }
