@@ -18,6 +18,7 @@ import { adminBookingRouter } from "./routes/admin.booking.routes";
 import { adminPaymentRouter } from "./routes/admin.payment.routes";
 import { adminNotificationRouter } from "./routes/admin.notification.routes";
 import { adminDashboardRouter } from "./routes/admin.dashboard.routes";
+import { adminAuditRouter } from "./routes/admin.audit.routes";
 dotenv.config();
 const PORT = process.env.PORT || 8000;
 
@@ -52,6 +53,7 @@ app.use("/admin", adminBookingRouter);
 app.use("/admin", adminPaymentRouter);
 app.use("/admin", adminNotificationRouter);
 app.use("/admin", adminDashboardRouter);
+app.use("/admin", adminAuditRouter);
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

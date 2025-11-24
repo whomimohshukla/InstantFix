@@ -36,7 +36,10 @@ export async function loginCtrl(req: Request, res: Response) {
     return res
       .status(400)
       .json({ ok: false, message: "email and password required" });
-  const result = await login({ email, password, role });
+  const ipHeader = (req.headers["x-forwarded-for"] as string | undefined)?.split(",")[0]?.trim();
+  const ip = ipHeader || (req.socket as any)?.remoteAddress || req.ip || null;
+  const userAgent = (req.headers["user-agent"] as string | undefined) || null;
+  const result = await login({ email, password, role, ip, userAgent });
   return res.status(result.status).json(result);
 }
 

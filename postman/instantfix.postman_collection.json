@@ -122,6 +122,8 @@
         { "name": "Addresses: Create", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/me/addresses", "body": {"mode":"raw","raw":"{\n  \"label\": \"Home\",\n  \"line1\": \"123 Street\",\n  \"city\": \"City\",\n  \"state\": \"State\",\n  \"postalCode\": \"123456\",\n  \"isDefault\": true\n}" } } },
         { "name": "Addresses: Update", "request": { "method": "PATCH", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/me/addresses/{{addressId}}", "body": {"mode":"raw","raw":"{\n  \"label\": \"Home 2\"\n}" } } },
         { "name": "Addresses: Delete", "request": { "method": "DELETE", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/me/addresses/{{addressId}}" } },
+        { "name": "Profile: Get My Profile", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/me/profile" } },
+        { "name": "Profile: Update My Profile", "request": { "method": "PATCH", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/me/profile", "body": {"mode":"raw","raw":"{\n  \"name\": \"Rahul\",\n  \"avatarUrl\": \"https://.../pic.jpg\",\n  \"preferences\": { \"notifyEmail\": true, \"language\": \"en\" },\n  \"defaultAddressId\": \"{{addressId}}\"\n}" } } },
         { "name": "Bookings: Create", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/bookings", "body": {"mode":"raw","raw":"{\n  \"serviceId\": \"{{serviceId}}\",\n  \"addressId\": \"{{addressId}}\",\n  \"scheduledAt\": null,\n  \"notes\": \"Please come after 6 PM\"\n}" } } },
         { "name": "Bookings: List Mine", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/bookings/me" } },
         { "name": "Bookings: Get Mine by Id", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/bookings/me/{{bookingId}}" } }
@@ -143,6 +145,79 @@
         { "name": "Get Technician Location", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/location/technician/{{technicianUserId}}/location" } }
       ]
     }
+    ,
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Catalog",
+          "item": [
+            { "name": "Categories: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/catalog/categories" } },
+            { "name": "Categories: Create", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/catalog/categories", "body": {"mode":"raw","raw":"{\n  \"name\": \"AC Repair\",\n  \"slug\": \"ac-repair\"\n}" } } },
+            { "name": "Categories: Update", "request": { "method": "PATCH", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/catalog/categories/{{categoryId}}", "body": {"mode":"raw","raw":"{\n  \"name\": \"AC & Cooling\"\n}" } } },
+            { "name": "Categories: Delete", "request": { "method": "DELETE", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/catalog/categories/{{categoryId}}" } },
+            { "name": "Services: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/catalog/services?categoryId={{categoryId}}" } },
+            { "name": "Services: Create", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/catalog/services", "body": {"mode":"raw","raw":"{\n  \"categoryId\": \"{{categoryId}}\",\n  \"name\": \"AC Gas Refill\",\n  \"slug\": \"ac-gas-refill\",\n  \"basePrice\": 999\n}" } } },
+            { "name": "Services: Update", "request": { "method": "PATCH", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/catalog/services/{{serviceId}}", "body": {"mode":"raw","raw":"{\n  \"isActive\": true\n}" } } },
+            { "name": "Services: Delete", "request": { "method": "DELETE", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/catalog/services/{{serviceId}}" } }
+          ]
+        },
+        {
+          "name": "Technician",
+          "item": [
+            { "name": "Verifications: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/technician/verifications?status=PENDING" } },
+            { "name": "Verifications: Get", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/technician/verifications/{{verificationId}}" } },
+            { "name": "Verifications: Review", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/technician/verifications/{{verificationId}}/review", "body": {"mode":"raw","raw":"{\n  \"action\": \"APPROVE\",\n  \"notes\": \"All docs valid\"\n}" } } }
+          ]
+        },
+        {
+          "name": "Users",
+          "item": [
+            { "name": "Users: List/Search", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/users?q=&role=&status=&limit=20&skip=0" } },
+            { "name": "Users: Update Status", "request": { "method": "PATCH", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/users/{{userId}}/status", "body": {"mode":"raw","raw":"{\n  \"status\": \"SUSPENDED\"\n}" } } }
+          ]
+        },
+        {
+          "name": "Bookings",
+          "item": [
+            { "name": "Bookings: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/bookings?status=&limit=20&skip=0" } },
+            { "name": "Bookings: Get", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/bookings/{{bookingId}}" } },
+            { "name": "Bookings: Update Status", "request": { "method": "PATCH", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/bookings/{{bookingId}}/status", "body": {"mode":"raw","raw":"{\n  \"status\": \"CONFIRMED\"\n}" } } },
+            { "name": "Bookings: Reassign Technician", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/bookings/{{bookingId}}/reassign", "body": {"mode":"raw","raw":"{\n  \"technicianId\": \"{{technicianUserId}}\"\n}" } } }
+          ]
+        },
+        {
+          "name": "Payments & Refunds",
+          "item": [
+            { "name": "Payments: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/payments?provider=&status=&limit=20&skip=0" } },
+            { "name": "Payments: Get", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/payments/{{paymentId}}" } },
+            { "name": "Refunds: Create", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/refunds", "body": {"mode":"raw","raw":"{\n  \"paymentId\": \"{{paymentId}}\",\n  \"amount\": 500,\n  \"reason\": \"Customer cancel\"\n}" } } },
+            { "name": "Refunds: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/refunds?paymentId={{paymentId}}&limit=20&skip=0" } },
+            { "name": "Refunds: Get", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/refunds/{{refundId}}" } }
+          ]
+        },
+        {
+          "name": "Notifications",
+          "item": [
+            { "name": "Send to User", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/notifications/send", "body": {"mode":"raw","raw":"{\n  \"userId\": \"{{userId}}\",\n  \"channel\": \"EMAIL\",\n  \"title\": \"Hello\",\n  \"message\": \"Test message\"\n}" } } },
+            { "name": "Broadcast to Role", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/notifications/broadcast", "body": {"mode":"raw","raw":"{\n  \"role\": \"CUSTOMER\",\n  \"channel\": \"EMAIL\",\n  \"title\": \"News\",\n  \"message\": \"Big sale!\",\n  \"max\": 1000\n}" } } }
+          ]
+        },
+        {
+          "name": "Dashboard",
+          "item": [
+            { "name": "Summary", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/dashboard/summary" } },
+            { "name": "Timeseries: Revenues", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/dashboard/timeseries?metric=revenues&range=30d&interval=1%20day" } }
+          ]
+        },
+        {
+          "name": "Audit",
+          "item": [
+            { "name": "Audit Logs: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/audit-logs?limit=20&skip=0" } }
+          ]
+        }
+      ]
+    }
   ],
   "variable": [
     { "key": "base_url", "value": "http://localhost:4000" },
@@ -151,6 +226,10 @@
     { "key": "serviceId", "value": "" },
     { "key": "addressId", "value": "" },
     { "key": "bookingId", "value": "" },
-    { "key": "technicianUserId", "value": "" }
+    { "key": "technicianUserId", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "paymentId", "value": "" },
+    { "key": "refundId", "value": "" },
+    { "key": "verificationId", "value": "" }
   ]
 }
