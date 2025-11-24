@@ -1,0 +1,261 @@
+{
+  "info": {
+    "name": "InstantFix",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health: Service Up",
+      "request": { "method": "GET", "url": "{{base_url}}/health" }
+    },
+    {
+      "name": "Health: DB Up",
+      "request": { "method": "GET", "url": "{{base_url}}/health/db" }
+    },
+    {
+      "name": "Auth: Signup (role optional)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/auth/signup",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Secret#123\",\n  \"name\": \"User\",\n  \"phone\": \"+911234567890\",\n  \"role\": \"CUSTOMER\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 201 or 409', function () {",
+              "  pm.expect([201,409]).to.include(pm.response.code);",
+              "});",
+              "if (pm.response.code === 201) {",
+              "  pm.test('Signup ok', function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.ok).to.eql(true);",
+              "  });",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth: Verify Email OTP",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/auth/verify-otp",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"user@example.com\",\n  \"otp\": \"123456\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200 or 400', function () {",
+              "  pm.expect([200,400]).to.include(pm.response.code);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth: Resend Email OTP",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/auth/resend-otp",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"user@example.com\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200 or 429', function () {",
+              "  pm.expect([200,429]).to.include(pm.response.code);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth: Login (email/password, optional role)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Secret#123\",\n  \"role\": \"CUSTOMER\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Login status is 200 or 401 or 403', function () {",
+              "  pm.expect([200,401,403]).to.include(pm.response.code);",
+              "});",
+              "if (pm.response.code === 200) {",
+              "  const json = pm.response.json();",
+              "  pm.environment.set('token', json.token);",
+              "  pm.test('Token saved', function () { pm.expect(!!json.token).to.eql(true); });",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Phone: Send OTP",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/auth/phone/send-otp",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phone\": \"+911234567890\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200 or 404', function () {",
+              "  pm.expect([200,404]).to.include(pm.response.code);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Phone: Verify OTP (returns JWT)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/auth/phone/verify-otp",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phone\": \"+911234567890\",\n  \"otp\": \"123456\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200 or 400 or 404', function () {",
+              "  pm.expect([200,400,404]).to.include(pm.response.code);",
+              "});",
+              "if (pm.response.code === 200) {",
+              "  const json = pm.response.json();",
+              "  pm.environment.set('token', json.token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Phone: Resend OTP",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/auth/phone/resend-otp",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phone\": \"+911234567890\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200 or 429', function () {",
+              "  pm.expect([200,429]).to.include(pm.response.code);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Technician: Onboarding Status",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{base_url}}/technician/onboarding/status"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200 or 401 or 403', function () {",
+              "  pm.expect([200,401,403]).to.include(pm.response.code);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Technician: Update Onboarding",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{base_url}}/technician/onboarding/update",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"headline\": \"AC Specialist\",\n  \"bio\": \"5+ yrs\",\n  \"yearsExperience\": 5,\n  \"skills\": [\"AC\", \"Fridge\"],\n  \"toolset\": [\"Multimeter\"],\n  \"hasVehicle\": true,\n  \"hourlyRate\": 1200\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200 or 400 or 401 or 403', function () {",
+              "  pm.expect([200,400,401,403]).to.include(pm.response.code);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:4000" },
+    { "key": "token", "value": "" }
+  ]
+}

@@ -12,10 +12,9 @@ datasource db {
   provider = "postgresql"
 }
 
-
- 
-
-/* ===== Enums ===== */
+/**
+ * ===== Enums =====
+ */
 enum UserRole {
   CUSTOMER
   TECHNICIAN
@@ -88,43 +87,53 @@ enum DayOfWeek {
   SUN
 }
 
-/* ===== Users & Profiles ===== */
+/**
+ * ===== Users & Profiles =====
+ */
 model User {
-  id           String     @id @default(cuid())
-  email        String     @unique
-  phone        String?    @unique
-  passwordHash String
-  role         UserRole   @default(CUSTOMER)
-  status       UserStatus @default(ACTIVE)
-  name         String?
-  lastLoginAt  DateTime?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  id              String     @id @default(cuid())
+  email           String     @unique
+  phone           String?    @unique
+  passwordHash    String
+  role            UserRole   @default(CUSTOMER)
+  status          UserStatus @default(ACTIVE)
+  name            String?
+  emailVerifiedAt DateTime?
+  phoneVerifiedAt DateTime?
+  lastLoginAt     DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 
-  customerProfile   CustomerProfile?
-  technicianProfile TechnicianProfile?
-  addresses        Address[]
-  bookings         Booking[]        @relation("CustomerBookings")
-  reviews          Review[]
-  notifications    Notification[]
-  devices          Device[]
-  loginActivities  LoginActivity[]
-  adminActions     AdminActionLog[] @relation("AdminActor")
+  customerProfile    CustomerProfile?
+  technicianProfile  TechnicianProfile?
+  addresses          Address[]
+  bookings           Booking[]             @relation("CustomerBookings")
+  technicianBookings Booking[]             @relation("TechnicianBookings")
+  reviews            Review[]
+  notifications      Notification[]
+  devices            Device[]
+  loginActivities    LoginActivity[]
+  adminActions       AdminActionLog[]      @relation("AdminActor")
+  dispatchOffers     DispatchOffer[]
+  disputesOpened     Dispute[]
+  adminReviews       VerificationRequest[] @relation("AdminReviewer")
 }
 
 model CustomerProfile {
-  id        String  @id @default(cuid())
-  userId    String  @unique
-  user      User    @relation(fields: [userId], references: [id])
-  loyalty   Int     @default(0)
+  id      String @id @default(cuid())
+  userId  String @unique
+  user    User   @relation(fields: [userId], references: [id])
+  loyalty Int    @default(0)
 }
 
-/* Technician professional data */
+/**
+ * Technician professional data
+ */
 model TechnicianProfile {
   id              String   @id @default(cuid())
   userId          String   @unique
   user            User     @relation(fields: [userId], references: [id])
-  headline        String?  // short title
+  headline        String? // short title
   bio             String?
   yearsExperience Int      @default(0)
   skills          String[] // e.g. ["AC","Fridge","WashingMachine"]
@@ -132,7 +141,7 @@ model TechnicianProfile {
   hasVehicle      Boolean  @default(false)
   ratingAvg       Float    @default(0)
   ratingCount     Int      @default(0)
-  hourlyRate      Int?     // in smallest currency unit
+  hourlyRate      Int? // in smallest currency unit
 
   kyc             VerificationRequest[]
   documents       TechnicianDocument[]
@@ -144,215 +153,236 @@ model TechnicianProfile {
   bankAccounts    BankAccount[]
 }
 
-/* ===== Address & Location ===== */
+/**
+ * ===== Address & Location =====
+ */
 model Address {
-  id          String  @id @default(cuid())
-  userId      String
-  user        User    @relation(fields: [userId], references: [id])
-  label       String?
-  line1       String
-  line2       String?
-  city        String
-  state       String
-  postalCode  String
-  lat         Float?
-  lng         Float?
-  isDefault   Boolean @default(false)
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  label      String?
+  line1      String
+  line2      String?
+  city       String
+  state      String
+  postalCode String
+  lat        Float?
+  lng        Float?
+  isDefault  Boolean   @default(false)
+  bookings   Booking[]
 }
 
-/* Technician service area as circles (center + radius) */
+/**
+ * Technician service area as circles (center + radius)
+ */
 model TechnicianServiceArea {
-  id             String   @id @default(cuid())
-  technicianId   String
-  technician     TechnicianProfile @relation(fields: [technicianId], references: [id])
-  centerLat      Float
-  centerLng      Float
-  radiusKm       Float    @default(10)
-  createdAt      DateTime @default(now())
+  id           String            @id @default(cuid())
+  technicianId String
+  technician   TechnicianProfile @relation(fields: [technicianId], references: [id])
+  centerLat    Float
+  centerLng    Float
+  radiusKm     Float             @default(10)
+  createdAt    DateTime          @default(now())
 }
 
-/* Availability per weekday (typical repeating schedule) */
+/**
+ * Availability per weekday (typical repeating schedule)
+ */
 model TechnicianAvailability {
-  id             String   @id @default(cuid())
-  technicianId   String
-  technician     TechnicianProfile @relation(fields: [technicianId], references: [id])
-  dayOfWeek      DayOfWeek
-  startTimeMin   Int      // minutes since 00:00 (e.g. 540 for 9:00 AM)
-  endTimeMin     Int      // minutes since 00:00
-  createdAt      DateTime @default(now())
+  id           String            @id @default(cuid())
+  technicianId String
+  technician   TechnicianProfile @relation(fields: [technicianId], references: [id])
+  dayOfWeek    DayOfWeek
+  startTimeMin Int // minutes since 00:00 (e.g. 540 for 9:00 AM)
+  endTimeMin   Int // minutes since 00:00
+  createdAt    DateTime          @default(now())
 
   @@unique([technicianId, dayOfWeek, startTimeMin, endTimeMin])
 }
 
-/* ===== Catalog ===== */
+/**
+ * ===== Catalog =====
+ */
 model ServiceCategory {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  slug      String   @unique
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String    @unique
   services  Service[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Service {
-  id           String          @id @default(cuid())
-  categoryId   String
-  category     ServiceCategory @relation(fields: [categoryId], references: [id])
-  name         String
-  slug         String  @unique
-  basePrice    Int             // smallest currency unit
-  description  String?
-  isActive     Boolean @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          String          @id @default(cuid())
+  categoryId  String
+  category    ServiceCategory @relation(fields: [categoryId], references: [id])
+  name        String
+  slug        String          @unique
+  basePrice   Int // smallest currency unit
+  description String?
+  isActive    Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 
-  bookings     Booking[]
+  bookings Booking[]
 }
 
-/* ===== Bookings & Media ===== */
+/**
+ * ===== Bookings & Media =====
+ */
 model Booking {
-  id              String        @id @default(cuid())
-  customerId      String
-  customer        User          @relation("CustomerBookings", fields: [customerId], references: [id])
-  serviceId       String
-  service         Service       @relation(fields: [serviceId], references: [id])
-  addressId       String
-  address         Address       @relation(fields: [addressId], references: [id])
-  technicianId    String?
-  technician      User?         @relation(fields: [technicianId], references: [id])
-  scheduledAt     DateTime?
-  status          BookingStatus @default(PENDING)
-  priceQuoted     Int?
-  priceFinal      Int?
-  notes           String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id           String        @id @default(cuid())
+  customerId   String
+  customer     User          @relation("CustomerBookings", fields: [customerId], references: [id])
+  serviceId    String
+  service      Service       @relation(fields: [serviceId], references: [id])
+  addressId    String
+  address      Address       @relation(fields: [addressId], references: [id])
+  technicianId String?
+  technician   User?         @relation("TechnicianBookings", fields: [technicianId], references: [id])
+  scheduledAt  DateTime?
+  status       BookingStatus @default(PENDING)
+  priceQuoted  Int?
+  priceFinal   Int?
+  notes        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
-  media           BookingMedia[]
-  payments        Payment[]
-  refunds         Refund[]
-  reviews         Review[]
-  dispatchOffers  DispatchOffer[]
-  dispute         Dispute?
+  media          BookingMedia[]
+  payments       Payment[]
+  reviews        Review[]
+  dispatchOffers DispatchOffer[]
+  dispute        Dispute?
+  earnings       Earning[]
 }
 
 model BookingMedia {
-  id         String   @id @default(cuid())
-  bookingId  String
-  booking    Booking  @relation(fields: [bookingId], references: [id])
-  type       String   // "photo" | "video"
-  s3Key      String
-  aiLabels   String[]
-  createdAt  DateTime @default(now())
+  id        String   @id @default(cuid())
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  type      String // "photo" | "video"
+  s3Key     String
+  aiLabels  String[]
+  createdAt DateTime @default(now())
 }
 
-/* Dispatch offer flow for pro routing/acceptance */
+/**
+ * Dispatch offer flow for pro routing/acceptance
+ */
 model DispatchOffer {
-  id            String   @id @default(cuid())
-  bookingId     String
-  booking       Booking  @relation(fields: [bookingId], references: [id])
-  technicianId  String
-  technician    User     @relation(fields: [technicianId], references: [id])
-  status        String   @default("offered") // offered|accepted|rejected|expired
-  score         Float?
-  expiresAt     DateTime?
-  createdAt     DateTime @default(now())
+  id           String    @id @default(cuid())
+  bookingId    String
+  booking      Booking   @relation(fields: [bookingId], references: [id])
+  technicianId String
+  technician   User      @relation(fields: [technicianId], references: [id])
+  status       String    @default("offered") // offered|accepted|rejected|expired
+  score        Float?
+  expiresAt    DateTime?
+  createdAt    DateTime  @default(now())
 
   @@index([bookingId, technicianId])
 }
 
-/* ===== Payments & Financials ===== */
+/**
+ * ===== Payments & Financials =====
+ */
 model Payment {
-  id           String          @id @default(cuid())
-  bookingId    String
-  booking      Booking         @relation(fields: [bookingId], references: [id])
-  provider     PaymentProvider
-  providerId   String
-  amount       Int
-  currency     String          @default("INR")
-  status       PaymentStatus
-  createdAt    DateTime        @default(now())
+  id         String          @id @default(cuid())
+  bookingId  String
+  booking    Booking         @relation(fields: [bookingId], references: [id])
+  provider   PaymentProvider
+  providerId String
+  amount     Int
+  currency   String          @default("INR")
+  status     PaymentStatus
+  createdAt  DateTime        @default(now())
+
+  refunds Refund[]
 
   @@index([bookingId, provider, providerId])
 }
 
 model Refund {
-  id           String    @id @default(cuid())
-  paymentId    String
-  payment      Payment   @relation(fields: [paymentId], references: [id])
-  amount       Int
-  reason       String?
-  createdAt    DateTime  @default(now())
+  id        String   @id @default(cuid())
+  paymentId String
+  payment   Payment  @relation(fields: [paymentId], references: [id])
+  amount    Int
+  reason    String?
+  createdAt DateTime @default(now())
 }
 
 model Earning {
-  id                String             @id @default(cuid())
-  technicianId      String
-  technician        TechnicianProfile  @relation(fields: [technicianId], references: [id])
-  bookingId         String
-  booking           Booking            @relation(fields: [bookingId], references: [id])
-  amount            Int
-  createdAt         DateTime           @default(now())
+  id           String            @id @default(cuid())
+  technicianId String
+  technician   TechnicianProfile @relation(fields: [technicianId], references: [id])
+  bookingId    String
+  booking      Booking           @relation(fields: [bookingId], references: [id])
+  amount       Int
+  createdAt    DateTime          @default(now())
 }
 
 model BankAccount {
-  id                String             @id @default(cuid())
-  technicianId      String
-  technician        TechnicianProfile  @relation(fields: [technicianId], references: [id])
-  upi               String?            // e.g. name@upi
-  accountHolder     String?
-  accountNumber     String?
-  ifsc              String?
-  isDefault         Boolean            @default(true)
-  createdAt         DateTime           @default(now())
+  id            String            @id @default(cuid())
+  technicianId  String
+  technician    TechnicianProfile @relation(fields: [technicianId], references: [id])
+  upi           String? // e.g. name@upi
+  accountHolder String?
+  accountNumber String?
+  ifsc          String?
+  isDefault     Boolean           @default(true)
+  createdAt     DateTime          @default(now())
 }
 
 model Payout {
-  id                String             @id @default(cuid())
-  technicianId      String
-  technician        TechnicianProfile  @relation(fields: [technicianId], references: [id])
-  amount            Int
-  status            String             @default("pending") // pending|paid|failed
-  transferRef       String?
-  createdAt         DateTime           @default(now())
-  paidAt            DateTime?
+  id           String            @id @default(cuid())
+  technicianId String
+  technician   TechnicianProfile @relation(fields: [technicianId], references: [id])
+  amount       Int
+  status       String            @default("pending") // pending|paid|failed
+  transferRef  String?
+  createdAt    DateTime          @default(now())
+  paidAt       DateTime?
 }
 
-/* ===== Reviews & Disputes ===== */
+/**
+ * ===== Reviews & Disputes =====
+ */
 model Review {
-  id          String   @id @default(cuid())
-  bookingId   String   @unique
-  booking     Booking  @relation(fields: [bookingId], references: [id])
-  customerId  String
-  customer    User     @relation(fields: [customerId], references: [id])
-  rating      Int
-  comments    String?
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  bookingId  String   @unique
+  booking    Booking  @relation(fields: [bookingId], references: [id])
+  customerId String
+  customer   User     @relation(fields: [customerId], references: [id])
+  rating     Int
+  comments   String?
+  createdAt  DateTime @default(now())
 }
 
 model Dispute {
-  id          String        @id @default(cuid())
-  bookingId   String        @unique
-  booking     Booking       @relation(fields: [bookingId], references: [id])
-  openedById  String
-  openedBy    User          @relation(fields: [openedById], references: [id])
-  status      DisputeStatus @default(OPEN)
-  reason      String?
-  resolution  String?
-  createdAt   DateTime      @default(now())
-  resolvedAt  DateTime?
+  id         String        @id @default(cuid())
+  bookingId  String        @unique
+  booking    Booking       @relation(fields: [bookingId], references: [id])
+  openedById String
+  openedBy   User          @relation(fields: [openedById], references: [id])
+  status     DisputeStatus @default(OPEN)
+  reason     String?
+  resolution String?
+  createdAt  DateTime      @default(now())
+  resolvedAt DateTime?
 }
 
-/* ===== Notifications & Devices ===== */
+/**
+ * ===== Notifications & Devices =====
+ */
 model Notification {
-  id         String              @id @default(cuid())
-  userId     String
-  user       User                @relation(fields: [userId], references: [id])
-  channel    NotificationChannel
-  title      String
-  body       String
-  seen       Boolean             @default(false)
-  createdAt  DateTime            @default(now())
+  id        String              @id @default(cuid())
+  userId    String
+  user      User                @relation(fields: [userId], references: [id])
+  channel   NotificationChannel
+  title     String
+  body      String
+  seen      Boolean             @default(false)
+  createdAt DateTime            @default(now())
 
   @@index([userId, seen, channel])
 }
@@ -361,7 +391,7 @@ model Device {
   id          String   @id @default(cuid())
   userId      String
   user        User     @relation(fields: [userId], references: [id])
-  platform    String?  // ios|android|web
+  platform    String? // ios|android|web
   pushToken   String?
   fingerprint String?
   createdAt   DateTime @default(now())
@@ -378,56 +408,60 @@ model LoginActivity {
   @@index([userId, createdAt])
 }
 
-/* ===== Technician Verification & Compliance ===== */
+/**
+ * ===== Technician Verification & Compliance =====
+ */
 model VerificationRequest {
-  id            String             @id @default(cuid())
-  technicianId  String
-  technician    TechnicianProfile  @relation(fields: [technicianId], references: [id])
-  status        VerificationStatus @default(PENDING)
-  notes         String?
-  createdAt     DateTime           @default(now())
-  reviewedAt    DateTime?
-  reviewedById  String?
-  reviewedBy    User?              @relation("AdminReviewer", fields: [reviewedById], references: [id])
+  id           String             @id @default(cuid())
+  technicianId String
+  technician   TechnicianProfile  @relation(fields: [technicianId], references: [id])
+  status       VerificationStatus @default(PENDING)
+  notes        String?
+  createdAt    DateTime           @default(now())
+  reviewedAt   DateTime?
+  reviewedById String?
+  reviewedBy   User?              @relation("AdminReviewer", fields: [reviewedById], references: [id])
 }
 
 model TechnicianDocument {
-  id            String             @id @default(cuid())
-  technicianId  String
-  technician    TechnicianProfile  @relation(fields: [technicianId], references: [id])
-  type          DocumentType
-  number        String?
-  s3Key         String
-  status        VerificationStatus @default(PENDING)
-  issuedOn      DateTime?
-  expiresOn     DateTime?
-  verifiedAt    DateTime?
-  createdAt     DateTime           @default(now())
+  id           String             @id @default(cuid())
+  technicianId String
+  technician   TechnicianProfile  @relation(fields: [technicianId], references: [id])
+  type         DocumentType
+  number       String?
+  s3Key        String
+  status       VerificationStatus @default(PENDING)
+  issuedOn     DateTime?
+  expiresOn    DateTime?
+  verifiedAt   DateTime?
+  createdAt    DateTime           @default(now())
 
   @@index([technicianId, type, status])
 }
 
 model BackgroundCheck {
-  id            String             @id @default(cuid())
-  technicianId  String   @unique
-  technician    TechnicianProfile  @relation(fields: [technicianId], references: [id])
-  provider      String?
-  status        VerificationStatus @default(PENDING)
-  reportUrl     String?
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
+  id           String             @id @default(cuid())
+  technicianId String             @unique
+  technician   TechnicianProfile  @relation(fields: [technicianId], references: [id])
+  provider     String?
+  status       VerificationStatus @default(PENDING)
+  reportUrl    String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
 }
 
-/* ===== Admin & Ops ===== */
+/**
+ * ===== Admin & Ops =====
+ */
 model AdminActionLog {
-  id          String   @id @default(cuid())
-  actorId     String
-  actor       User     @relation("AdminActor", fields: [actorId], references: [id])
-  entityType  String   // "Booking" | "User" | "TechnicianProfile" | "Payment" | ...
-  entityId    String
-  action      String   // "UPDATE" | "REFUND" | "REASSIGN" ...
-  diff        Json?
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  actorId    String
+  actor      User     @relation("AdminActor", fields: [actorId], references: [id])
+  entityType String // "Booking" | "User" | "TechnicianProfile" | "Payment" | ...
+  entityId   String
+  action     String // "UPDATE" | "REFUND" | "REASSIGN" ...
+  diff       Json?
+  createdAt  DateTime @default(now())
 
   @@index([entityType, entityId, action])
 }
@@ -440,7 +474,9 @@ model FeatureFlag {
   updatedAt DateTime @updatedAt
 }
 
-/* ===== Infra/Events ===== */
+/**
+ * ===== Infra/Events =====
+ */
 model EventOutbox {
   id        String   @id @default(cuid())
   topic     String
