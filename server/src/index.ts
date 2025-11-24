@@ -11,6 +11,13 @@ import { bookingRouter } from "./routes/booking.routes";
 import { geoRouter } from "./routes/geo.routes";
 import { locationRouter } from "./routes/location.routes";
 import { profileRouter } from "./routes/profile.routes";
+import { adminCatalogRouter } from "./routes/admin.catalog.routes";
+import { adminTechnicianRouter } from "./routes/admin.technician.routes";
+import { adminUserRouter } from "./routes/admin.user.routes";
+import { adminBookingRouter } from "./routes/admin.booking.routes";
+import { adminPaymentRouter } from "./routes/admin.payment.routes";
+import { adminNotificationRouter } from "./routes/admin.notification.routes";
+import { adminDashboardRouter } from "./routes/admin.dashboard.routes";
 dotenv.config();
 const PORT = process.env.PORT || 8000;
 
@@ -38,6 +45,13 @@ app.use("/me", profileRouter);
 app.use("/bookings", bookingRouter);
 app.use("/geo", geoRouter);
 app.use("/location", locationRouter);
+app.use("/admin/catalog", adminCatalogRouter);
+app.use("/admin/technician", adminTechnicianRouter);
+app.use("/admin", adminUserRouter);
+app.use("/admin", adminBookingRouter);
+app.use("/admin", adminPaymentRouter);
+app.use("/admin", adminNotificationRouter);
+app.use("/admin", adminDashboardRouter);
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
