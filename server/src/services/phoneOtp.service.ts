@@ -3,6 +3,7 @@ import { withinRateLimit } from "./rateLimit";
 import { plivoClient, plivoFrom } from "../config/plivo";
 import { userRepo } from "../repositories/user.repo";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 const OTP_TTL_SECONDS = 5 * 60; // 5 minutes
 const RESEND_LIMIT = 5; // per hour
@@ -21,6 +22,12 @@ function generateOTP() {
 }
 
 async function sendSmsOTP(phone: string, otp: string) {
+  // Allow disabling real SMS in local/dev via env toggle
+  if (process.env.SMS_DISABLED === "1") {
+    console.log(`[DEV SMS] To ${phone}: ${otp}`);
+    return;
+  }
+  console.log("code ", otp);
   await plivoClient.messages.create(
     plivoFrom,
     phone,
@@ -33,6 +40,15 @@ export async function issuePhoneOTP(phone: string) {
   const user = await userRepo.findByPhone(phone);
   if (!user)
     return { ok: false, status: 404, message: "Phone not registered" } as const;
+
+  // Restrict phone-only login to CUSTOMER accounts
+  if (user.role !== "CUSTOMER") {
+    return {
+      ok: false,
+      status: 403,
+      message: "Phone login allowed only for customers",
+    } as const;
+  }
 
   const otp = generateOTP();
   await redis.set(otpKey(phone), otp, "EX", OTP_TTL_SECONDS);
@@ -57,6 +73,15 @@ export async function verifyPhoneOTP(phone: string, otp: string) {
   if (!user)
     return { ok: false, status: 404, message: "Account not found" } as const;
 
+  // Extra safety: ensure only CUSTOMER can complete phone login
+  if (user.role !== "CUSTOMER") {
+    return {
+      ok: false,
+      status: 403,
+      message: "Phone login allowed only for customers",
+    } as const;
+  }
+
   // Mark phone verified in DB
   try {
     await userRepo.markPhoneVerified(phone);
@@ -72,6 +97,54 @@ export async function verifyPhoneOTP(phone: string, otp: string) {
     { expiresIn: "7d" }
   );
   return { ok: true, status: 200, token, data: user } as const;
+}
+
+// Customer phone-only signup helper
+export async function customerPhoneSignup(phone: string, name?: string) {
+  const phoneNorm = phone.trim();
+
+  // If already registered, just reuse login flow (send OTP)
+  const existing = await userRepo.findByPhone(phoneNorm);
+  if (existing) {
+    // Ensure it's a customer for phone login
+    if (existing.role !== "CUSTOMER") {
+      return {
+        ok: false,
+        status: 403,
+        message: "Phone login allowed only for customers",
+      } as const;
+    }
+    return issuePhoneOTP(phoneNorm);
+  }
+
+  // Create a new CUSTOMER with synthetic email & random password
+  const digits = phoneNorm.replace(/[^0-9]/g, "") || "phone";
+  let syntheticEmail = `${digits}@phone.instantfix.internal`;
+
+  // Best effort: avoid email collision
+  const emailExists = await userRepo.existsByEmail(syntheticEmail);
+  if (emailExists) {
+    syntheticEmail = `${digits}+${Date.now()}@phone.instantfix.internal`;
+  }
+
+  const randomPassword = `P!${Math.random()
+    .toString(36)
+    .slice(2)}${Date.now()}`;
+  const passwordHash = await bcrypt.hash(randomPassword, 10);
+
+  const user = await userRepo.create({
+    email: syntheticEmail,
+    passwordHash,
+    name: name || null,
+    phone: phoneNorm,
+    role: "CUSTOMER",
+  });
+
+  try {
+    await userRepo.createCustomerProfile(user.id);
+  } catch {}
+
+  return issuePhoneOTP(phoneNorm);
 }
 
 export async function resendPhoneOTP(phone: string) {

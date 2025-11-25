@@ -75,6 +75,15 @@
           "request": { "method": "GET", "url": "{{base_url}}/auth/availability?email=user@example.com&phone=%2B911234567890" }
         },
         {
+          "name": "Phone: Customer Signup (phone only)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/phone/customer-signup",
+            "body": { "mode": "raw", "raw": "{\n  \"phone\": \"+911234567890\",\n  \"name\": \"Rahul\"\n}" }
+          }
+        },
+        {
           "name": "Phone: Send OTP",
           "request": {
             "method": "POST",

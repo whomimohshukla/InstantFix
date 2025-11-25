@@ -1,10 +1,17 @@
 import { Request, Response } from "express";
-import { issuePhoneOTP, verifyPhoneOTP, resendPhoneOTP } from "../services/phoneOtp.service";
+import { issuePhoneOTP, verifyPhoneOTP, resendPhoneOTP, customerPhoneSignup } from "../services/phoneOtp.service";
 
 export async function phoneSendOtpCtrl(req: Request, res: Response) {
   const { phone } = req.body || {};
   if (!phone) return res.status(400).json({ ok: false, message: "phone required" });
   const result = await issuePhoneOTP(phone);
+  return res.status(result.status).json(result);
+}
+
+export async function phoneCustomerSignupCtrl(req: Request, res: Response) {
+  const { phone, name } = req.body || {};
+  if (!phone) return res.status(400).json({ ok: false, message: "phone required" });
+  const result = await customerPhoneSignup(phone, name);
   return res.status(result.status).json(result);
 }
 
