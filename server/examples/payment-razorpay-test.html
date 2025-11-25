@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>InstantFix Razorpay Payment Test</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    body { font-family: sans-serif; margin: 16px; }
+    label { display: block; margin: 8px 0 4px; }
+    input { width: 400px; max-width: 100%; }
+    #log { border: 1px solid #ccc; padding: 8px; height: 220px; overflow-y: auto; margin-top: 16px; }
+    button { margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>InstantFix Razorpay Payment Test</h1>
+
+  <p>Use this page as CUSTOMER to test the end-to-end flow:</p>
+  <ol>
+    <li>Enter API base URL, customer JWT, bookingId, and Razorpay key_id.</li>
+    <li>Click <b>Create Order &amp; Pay</b> to call <code>/payments/razorpay/order</code>.</li>
+    <li>Razorpay Checkout will open; complete payment with test keys.</li>
+    <li>Verify webhook + DB updates from your backend logs / admin APIs.</li>
+  </ol>
+
+  <label>API Base URL</label>
+  <input id="baseUrl" type="text" value="http://localhost:4000" />
+
+  <label>Customer JWT (Bearer token)</label>
+  <input id="token" type="text" value="" />
+
+  <label>Booking ID</label>
+  <input id="bookingId" type="text" value="" />
+
+  <label>Razorpay Key ID (test or live)</label>
+  <input id="razorpayKey" type="text" value="rzp_test_xxxxxxxxx" />
+
+  <button id="payBtn">Create Order &amp; Pay</button>
+
+  <div id="log"></div>
+
+  <script>
+    function log(msg, data) {
+      const el = document.getElementById("log");
+      const line = document.createElement("div");
+      line.textContent = "[" + new Date().toISOString() + "] " + msg +
+        (data ? " " + JSON.stringify(data) : "");
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    async function createOrderAndPay() {
+      const baseUrl = document.getElementById("baseUrl").value.trim();
+      const token = document.getElementById("token").value.trim();
+      const bookingId = document.getElementById("bookingId").value.trim();
+      const razorpayKey = document.getElementById("razorpayKey").value.trim();
+
+      if (!baseUrl || !token || !bookingId || !razorpayKey) {
+        alert("Please fill baseUrl, token, bookingId and razorpayKey.");
+        return;
+      }
+
+      try {
+        log("Calling /payments/razorpay/order", { bookingId });
+        const res = await fetch(baseUrl + "/payments/razorpay/order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify({ bookingId })
+        });
+
+        const json = await res.json();
+        log("Order response", json);
+
+        if (!res.ok || !json.ok) {
+          alert("Failed to create order: " + (json.message || res.status));
+          return;
+        }
+
+        const order = json.data;
+        // Expecting something like { orderId, amount, currency, bookingId, ... }
+        const options = {
+          key: razorpayKey,
+          amount: order.amount, // amount in paise from backend
+          currency: order.currency || "INR",
+          name: "InstantFix",
+          description: "Booking Payment",
+          order_id: order.orderId || order.id, // support both shapes
+          handler: function (response) {
+            log("Razorpay payment success handler", response);
+            alert("Payment completed in frontend. Backend will confirm via webhook.");
+          },
+          prefill: {
+            name: order.customerName || "Test User",
+            email: order.customerEmail || "user@example.com",
+            contact: order.customerPhone || "9999999999"
+          },
+          notes: {
+            bookingId: bookingId
+          },
+          theme: {
+            color: "#3399cc"
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.on("payment.failed", function (resp) {
+          log("Razorpay payment failed", resp.error);
+          alert("Payment failed: " + (resp.error && resp.error.description));
+        });
+
+        rzp.open();
+      } catch (e) {
+        console.error(e);
+        log("Error in payment flow", { message: e.message });
+        alert("Error: " + e.message);
+      }
+    }
+
+    document.getElementById("payBtn").onclick = createOrderAndPay;
+  </script>
+</body>
+</html>

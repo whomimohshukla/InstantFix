@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>InstantFix Live Tracking Demo (Option 1)</title>
+  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  <style>
+    body { font-family: sans-serif; margin: 16px; }
+    #log { border: 1px solid #ccc; padding: 8px; height: 250px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <h1>InstantFix Live Tracking Demo (Option 1)</h1>
+
+  <p>Use this page in two browser windows/tabs: one as TECHNICIAN (sending location), one as CUSTOMER (viewing updates).</p>
+
+  <label>
+    Role:
+    <select id="role">
+      <option value="TECHNICIAN">TECHNICIAN</option>
+      <option value="CUSTOMER">CUSTOMER</option>
+    </select>
+  </label>
+  <br /><br />
+
+  <label>
+    JWT token:
+    <input id="token" type="text" size="80" value="YOUR_JWT_TOKEN_HERE" />
+  </label>
+  <br /><br />
+
+  <label>
+    Booking ID:
+    <input id="bookingId" type="text" size="40" value="BOOKING_ID_HERE" />
+  </label>
+  <br /><br />
+
+  <label>
+    API URL:
+    <input id="apiUrl" type="text" size="40" value="http://localhost:4000" />
+  </label>
+  <br /><br />
+
+  <button id="connectBtn">Connect</button>
+  <button id="joinBookingBtn" disabled>Join Booking Room</button>
+  <button id="startLocationBtn" disabled>Start Sending Location (tech)</button>
+  <button id="stopLocationBtn" disabled>Stop Sending</button>
+
+  <h3>Log</h3>
+  <div id="log"></div>
+
+  <script>
+    let socket = null;
+    let intervalId = null;
+
+    function log(msg, data) {
+      const el = document.getElementById("log");
+      const line = document.createElement("div");
+      line.textContent = "[" + new Date().toISOString() + "] " + msg +
+        (data ? " " + JSON.stringify(data) : "");
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    document.getElementById("connectBtn").onclick = function () {
+      const token = document.getElementById("token").value.trim();
+      const apiUrl = document.getElementById("apiUrl").value.trim() || "http://localhost:4000";
+      if (!token) {
+        alert("Set JWT token first");
+        return;
+      }
+
+      if (socket) {
+        socket.disconnect();
+      }
+
+      socket = io(apiUrl, {
+        transports: ["websocket"],
+        auth: { token }
+      });
+
+      socket.on("connect", () => {
+        log("Connected with id " + socket.id);
+        document.getElementById("joinBookingBtn").disabled = false;
+        if (document.getElementById("role").value === "TECHNICIAN") {
+          document.getElementById("startLocationBtn").disabled = false;
+        }
+      });
+
+      socket.on("connect_error", (err) => {
+        log("Connect error", { message: err.message });
+      });
+
+      // Adjust event names if needed to match your backend index.ts
+      socket.on("booking:location:update", (payload) => {
+        log("Received location update", payload);
+      });
+
+      socket.on("disconnect", () => {
+        log("Disconnected");
+      });
+    };
+
+    document.getElementById("joinBookingBtn").onclick = function () {
+      const bookingId = document.getElementById("bookingId").value.trim();
+      if (!bookingId || !socket) return;
+
+      socket.emit("booking:track:join", { bookingId });
+      log("Emitted booking:track:join", { bookingId });
+    };
+
+    // Technician: send fake moving location every 3 seconds
+    document.getElementById("startLocationBtn").onclick = function () {
+      if (!socket) return;
+      const role = document.getElementById("role").value;
+      if (role !== "TECHNICIAN") {
+        alert("Location sending only for TECHNICIAN role");
+        return;
+      }
+
+      let lat = 12.91;
+      let lng = 77.64;
+
+      if (intervalId) clearInterval(intervalId);
+      intervalId = setInterval(() => {
+        lat += (Math.random() - 0.5) * 0.001;
+        lng += (Math.random() - 0.5) * 0.001;
+
+        const payload = { lat, lng, accuracy: 5 };
+        socket.emit("technician:location:update", payload);
+        log("Emitted technician:location:update", payload);
+      }, 3000);
+
+      document.getElementById("stopLocationBtn").disabled = false;
+    };
+
+    document.getElementById("stopLocationBtn").onclick = function () {
+      if (intervalId) clearInterval(intervalId);
+      intervalId = null;
+      document.getElementById("stopLocationBtn").disabled = true;
+    };
+  </script>
+</body>
+</html>
