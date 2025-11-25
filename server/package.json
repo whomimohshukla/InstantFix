@@ -28,7 +28,9 @@
     "morgan": "^1.10.1",
     "nodemailer": "^7.0.10",
     "pg": "^8.16.3",
-    "plivo": "^4.75.2"
+    "plivo": "^4.75.2",
+    "razorpay": "^2.9.6",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.5",

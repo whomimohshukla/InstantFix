@@ -143,7 +143,21 @@
       "name": "Technician",
       "item": [
         { "name": "Onboarding: Status", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/onboarding/status" } },
-        { "name": "Onboarding: Update", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/technician/onboarding/update", "body": {"mode":"raw","raw":"{\n  \"headline\": \"AC Specialist\",\n  \"yearsExperience\": 5,\n  \"skills\": [\"AC\"],\n  \"hasVehicle\": true\n}" } } }
+        { "name": "Onboarding: Update", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/technician/onboarding/update", "body": {"mode":"raw","raw":"{\n  \"headline\": \"AC Specialist\",\n  \"yearsExperience\": 5,\n  \"skills\": [\"AC\"],\n  \"hasVehicle\": true\n}" } } },
+        { "name": "Bookings: List My Jobs", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/bookings?status=&limit=20&skip=0" } },
+        { "name": "Bookings: Get My Job", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/bookings/{{bookingId}}" } },
+        { "name": "Bookings: Update Status", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/technician/bookings/{{bookingId}}/status", "body": {"mode":"raw","raw":"{\n  \"status\": \"ENROUTE\"\n}" } } },
+        { "name": "Offers: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/offers" } },
+        { "name": "Offers: Accept", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/offers/{{offerId}}/accept" } },
+        { "name": "Offers: Reject", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/offers/{{offerId}}/reject" } },
+        { "name": "Earnings: Summary", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/earnings/summary" } },
+        { "name": "Earnings: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/earnings?limit=20&skip=0" } },
+        { "name": "Service Areas: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/service-areas" } },
+        { "name": "Service Areas: Create", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/technician/service-areas", "body": {"mode":"raw","raw":"{\n  \"centerLat\": 12.91,\n  \"centerLng\": 77.64,\n  \"radiusKm\": 10\n}" } } },
+        { "name": "Service Areas: Delete", "request": { "method": "DELETE", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/service-areas/{{serviceAreaId}}" } },
+        { "name": "Availability: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/availability" } },
+        { "name": "Availability: Set", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/technician/availability", "body": {"mode":"raw","raw":"{\n  \"slots\": [\n    { \"dayOfWeek\": \"MON\", \"startTimeMin\": 540, \"endTimeMin\": 1080 }\n  ]\n}" } } },
+        { "name": "Payouts: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/payouts?limit=20&skip=0" } }
       ]
     },
     {
@@ -193,7 +207,8 @@
             { "name": "Bookings: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/bookings?status=&limit=20&skip=0" } },
             { "name": "Bookings: Get", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/bookings/{{bookingId}}" } },
             { "name": "Bookings: Update Status", "request": { "method": "PATCH", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/bookings/{{bookingId}}/status", "body": {"mode":"raw","raw":"{\n  \"status\": \"CONFIRMED\"\n}" } } },
-            { "name": "Bookings: Reassign Technician", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/bookings/{{bookingId}}/reassign", "body": {"mode":"raw","raw":"{\n  \"technicianId\": \"{{technicianUserId}}\"\n}" } } }
+            { "name": "Bookings: Reassign Technician", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/bookings/{{bookingId}}/reassign", "body": {"mode":"raw","raw":"{\n  \"technicianId\": \"{{technicianUserId}}\"\n}" } } },
+            { "name": "Bookings: Dispatch Offers", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/bookings/{{bookingId}}/dispatch", "body": {"mode":"raw","raw":"{\n  \"maxTechnicians\": 5,\n  \"maxRadiusKm\": 10\n}" } } }
           ]
         },
         {
