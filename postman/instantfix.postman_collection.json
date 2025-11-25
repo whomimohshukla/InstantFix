@@ -135,7 +135,8 @@
         { "name": "Profile: Update My Profile", "request": { "method": "PATCH", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/me/profile", "body": {"mode":"raw","raw":"{\n  \"name\": \"Rahul\",\n  \"avatarUrl\": \"https://.../pic.jpg\",\n  \"preferences\": { \"notifyEmail\": true, \"language\": \"en\" },\n  \"defaultAddressId\": \"{{addressId}}\"\n}" } } },
         { "name": "Bookings: Create", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/bookings", "body": {"mode":"raw","raw":"{\n  \"serviceId\": \"{{serviceId}}\",\n  \"addressId\": \"{{addressId}}\",\n  \"scheduledAt\": null,\n  \"notes\": \"Please come after 6 PM\"\n}" } } },
         { "name": "Bookings: List Mine", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/bookings/me" } },
-        { "name": "Bookings: Get Mine by Id", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/bookings/me/{{bookingId}}" } }
+        { "name": "Bookings: Get Mine by Id", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/bookings/me/{{bookingId}}" } },
+        { "name": "Payments: Create Razorpay Order", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/payments/razorpay/order", "body": {"mode":"raw","raw":"{\n  \"bookingId\": \"{{bookingId}}\"\n}" } } }
       ]
     },
     {
@@ -200,6 +201,7 @@
           "item": [
             { "name": "Payments: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/payments?provider=&status=&limit=20&skip=0" } },
             { "name": "Payments: Get", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/payments/{{paymentId}}" } },
+            { "name": "Payments: Reconcile", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/payments/{{paymentId}}/reconcile" } },
             { "name": "Refunds: Create", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/refunds", "body": {"mode":"raw","raw":"{\n  \"paymentId\": \"{{paymentId}}\",\n  \"amount\": 500,\n  \"reason\": \"Customer cancel\"\n}" } } },
             { "name": "Refunds: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/refunds?paymentId={{paymentId}}&limit=20&skip=0" } },
             { "name": "Refunds: Get", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/refunds/{{refundId}}" } }
@@ -226,6 +228,26 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Webhooks",
+      "item": [
+        {
+          "name": "Razorpay Webhook (test)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-razorpay-signature", "value": "{{razorpay_signature}}" }
+            ],
+            "url": "{{base_url}}/webhooks/razorpay",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event\": \"payment.captured\",\n  \"payload\": {\n    \"payment\": {\n      \"entity\": {\n        \"order_id\": \"order_123\",\n        \"amount\": 10000\n      }\n    }\n  }\n}"
+            }
+          }
+        }
+      ]
     }
   ],
   "variable": [
@@ -239,6 +261,7 @@
     { "key": "userId", "value": "" },
     { "key": "paymentId", "value": "" },
     { "key": "refundId", "value": "" },
-    { "key": "verificationId", "value": "" }
+    { "key": "verificationId", "value": "" },
+    { "key": "razorpay_signature", "value": "" }
   ]
 }
