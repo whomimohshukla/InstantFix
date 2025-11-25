@@ -1,5 +1,6 @@
 import { adminBookingRepo } from "../repositories/adminBooking.repo";
 import { BookingStatus } from "@prisma/client";
+import { adminDispatchService } from "./adminDispatch.service";
 
 function parseDate(input?: string): Date | null {
   if (!input) return null;
@@ -45,6 +46,20 @@ export const adminBookingService = {
     if (!status || !valid.includes(status))
       return { ok: false, status: 400, message: `status must be one of ${valid.join(",")}` } as const;
     const row = await adminBookingRepo.updateStatus(id, status);
+
+    // Auto-dispatch technicians when booking is confirmed
+    if (status === "CONFIRMED") {
+      try {
+        await adminDispatchService.dispatchForBooking(id, {
+          maxTechnicians: body?.maxTechnicians,
+          maxRadiusKm: body?.maxRadiusKm,
+        });
+      } catch (e) {
+        // swallow dispatch errors so status update still succeeds
+        // admin can always trigger manual dispatch endpoint if needed
+      }
+    }
+
     return { ok: true, status: 200, data: row } as const;
   },
 

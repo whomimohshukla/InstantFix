@@ -1,5 +1,7 @@
 import { adminPaymentRepo } from "../repositories/adminPayment.repo";
 import { PaymentProvider, PaymentStatus } from "@prisma/client";
+import { prisma } from "../lib/prisma";
+import { razorpayClient } from "../config/razorpay";
 
 export const adminPaymentService = {
   async list(query: any) {
@@ -42,5 +44,47 @@ export const adminPaymentService = {
     const row = await adminPaymentRepo.getRefundById(id);
     if (!row) return { ok: false, status: 404, message: "Not found" } as const;
     return { ok: true, status: 200, data: row } as const;
+  },
+
+  async reconcile(id: string) {
+    const payment = await prisma.payment.findUnique({ where: { id } });
+    if (!payment) return { ok: false, status: 404, message: "Payment not found" } as const;
+
+    if (payment.provider !== PaymentProvider.RAZORPAY)
+      return { ok: false, status: 400, message: "Reconcile supported only for Razorpay" } as const;
+
+    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET)
+      return { ok: false, status: 500, message: "Razorpay not configured" } as const;
+
+    // Fetch latest order info from Razorpay
+    const order = await (razorpayClient as any).orders.fetch(payment.providerId);
+
+    const orderStatus = (order?.status as string | undefined) || ""; // created | attempted | paid
+    let mappedStatus: PaymentStatus | null = null;
+
+    if (orderStatus === "paid") mappedStatus = PaymentStatus.SUCCEEDED;
+    else if (orderStatus === "attempted" || orderStatus === "created") mappedStatus = PaymentStatus.INITIATED;
+
+    const updates: Partial<{ status: PaymentStatus; amount: number }> = {};
+    if (mappedStatus && mappedStatus !== payment.status) {
+      updates.status = mappedStatus;
+    }
+    if (typeof order?.amount === "number" && order.amount !== payment.amount) {
+      updates.amount = order.amount;
+    }
+
+    let updated = payment;
+    if (Object.keys(updates).length > 0) {
+      updated = await prisma.payment.update({ where: { id }, data: updates });
+    }
+
+    return {
+      ok: true,
+      status: 200,
+      data: {
+        payment: updated,
+        provider: { id: order?.id, status: orderStatus, amount: order?.amount },
+      },
+    } as const;
   },
 };

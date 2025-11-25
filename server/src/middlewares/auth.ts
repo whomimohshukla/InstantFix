@@ -11,6 +11,9 @@ export interface AuthRequest extends Request {
 }
 
 export function authJwt(req: AuthRequest, res: Response, next: NextFunction) {
+  // Let CORS preflight requests pass without auth
+  if (req.method === "OPTIONS") return next();
+
   const header = req.headers.authorization || "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : undefined;
   if (!token)

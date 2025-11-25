@@ -36,3 +36,8 @@ export const adminGetRefundCtrl = async (req: Request, res: Response) => {
   const result = await adminPaymentService.getRefund(req.params.id);
   res.status(result.status).json(result);
 };
+
+export const adminReconcilePaymentCtrl = async (req: Request, res: Response) => {
+  const result = await adminPaymentService.reconcile(req.params.id);
+  res.status(result.status).json(result);
+};

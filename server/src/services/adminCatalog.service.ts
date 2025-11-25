@@ -9,8 +9,16 @@ export const adminCatalogService = {
   async createCategory(body: any) {
     const { name, slug } = body || {};
     if (!name || !slug) return { ok: false, status: 400, message: "name and slug required" } as const;
-    const data = await adminCatalogRepo.createCategory({ name, slug });
-    return { ok: true, status: 201, data } as const;
+    try {
+      const data = await adminCatalogRepo.createCategory({ name, slug });
+      return { ok: true, status: 201, data } as const;
+    } catch (e: any) {
+      if (e?.code === "P2002") {
+        // Any unique constraint violation here is effectively a slug conflict
+        return { ok: false, status: 409, message: "Category slug already exists" } as const;
+      }
+      throw e;
+    }
   },
   async updateCategory(id: string, body: any) {
     const { name, slug } = body || {};
@@ -32,8 +40,16 @@ export const adminCatalogService = {
     const { categoryId, name, slug, basePrice, description, isActive } = body || {};
     if (!categoryId || !name || !slug || typeof basePrice !== "number")
       return { ok: false, status: 400, message: "categoryId, name, slug, basePrice required" } as const;
-    const data = await adminCatalogRepo.createService({ categoryId, name, slug, basePrice, description, isActive });
-    return { ok: true, status: 201, data } as const;
+    try {
+      const data = await adminCatalogRepo.createService({ categoryId, name, slug, basePrice, description, isActive });
+      return { ok: true, status: 201, data } as const;
+    } catch (e: any) {
+      if (e?.code === "P2002") {
+        // Any unique constraint violation here is effectively a slug conflict
+        return { ok: false, status: 409, message: "Service slug already exists" } as const;
+      }
+      throw e;
+    }
   },
   async updateService(id: string, body: any) {
     const data = await adminCatalogRepo.updateService(id, body || {});
