@@ -7,6 +7,8 @@ import {
   adminListRefundsCtrl,
   adminGetRefundCtrl,
   adminReconcilePaymentCtrl,
+  adminListTechCashEventsCtrl,
+  adminMarkTechCashEventProcessedCtrl,
 } from "../controllers/AdminPayment.controllers";
 
 export const adminPaymentRouter = Router();
@@ -19,3 +21,8 @@ adminPaymentRouter.post("/payments/:id/reconcile", adminReconcilePaymentCtrl);
 adminPaymentRouter.post("/refunds", adminCreateRefundCtrl);
 adminPaymentRouter.get("/refunds", adminListRefundsCtrl);
 adminPaymentRouter.get("/refunds/:id", adminGetRefundCtrl);
+adminPaymentRouter.get("/tech-cash-events", adminListTechCashEventsCtrl);
+adminPaymentRouter.post(
+	"/tech-cash-events/:id/mark-processed",
+	adminMarkTechCashEventProcessedCtrl
+);

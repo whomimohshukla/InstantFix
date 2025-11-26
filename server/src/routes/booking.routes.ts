@@ -4,6 +4,8 @@ import {
   createBookingCtrl,
   listMyBookingsCtrl,
   getMyBookingCtrl,
+  cancelMyBookingCtrl,
+  rateMyBookingCtrl,
 } from "../controllers/Booking.controllers";
 
 export const bookingRouter = Router();
@@ -13,3 +15,5 @@ bookingRouter.use(authJwt, requireRole("CUSTOMER"));
 bookingRouter.post("/", createBookingCtrl);
 bookingRouter.get("/me", listMyBookingsCtrl);
 bookingRouter.get("/me/:id", getMyBookingCtrl);
+bookingRouter.post("/:id/cancel", cancelMyBookingCtrl);
+bookingRouter.post("/:id/rating", rateMyBookingCtrl);
