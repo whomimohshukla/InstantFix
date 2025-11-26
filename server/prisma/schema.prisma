@@ -67,6 +67,20 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum PaymentMode {
+  ONLINE_PREPAID
+  POSTPAID_ONLINE
+  POSTPAID_CASH
+}
+
+enum BookingPaymentStatus {
+  PENDING
+  PARTIALLY_PAID
+  PAID
+  REFUND_PENDING
+  REFUNDED
+}
+
 enum DisputeStatus {
   OPEN
   UNDER_REVIEW
@@ -244,6 +258,8 @@ model Booking {
   technician   User?         @relation("TechnicianBookings", fields: [technicianId], references: [id])
   scheduledAt  DateTime?
   status       BookingStatus @default(PENDING)
+  paymentMode  PaymentMode        @default(ONLINE_PREPAID)
+  paymentStatus BookingPaymentStatus @default(PENDING)
   priceQuoted  Int?
   priceFinal   Int?
   notes        String?

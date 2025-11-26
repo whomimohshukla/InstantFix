@@ -41,3 +41,18 @@ export const adminReconcilePaymentCtrl = async (req: Request, res: Response) => 
   const result = await adminPaymentService.reconcile(req.params.id);
   res.status(result.status).json(result);
 };
+
+export const adminListTechCashEventsCtrl = async (req: Request, res: Response) => {
+	const result = await adminPaymentService.listTechCashEvents(req.query);
+	res.status(result.status).json(result);
+};
+
+export const adminMarkTechCashEventProcessedCtrl = async (
+	req: Request,
+	res: Response
+) => {
+	const result = await adminPaymentService.markTechCashEventProcessed(
+		req.params.id
+	);
+	res.status(result.status).json(result);
+};
