@@ -74,6 +74,34 @@ export async function listMyTechnicianBookingsCtrl(
 	return res.status(result.status).json(result);
 }
 
+// POST /technician/bookings/:id/cancel
+export async function cancelTechnicianBookingCtrl(
+	req: AuthRequest,
+	res: Response
+) {
+	const technicianUserId = req.user!.id;
+	const result = await technicianBookingService.cancelBooking(
+		technicianUserId,
+		req.params.id,
+		req.body
+	);
+	return res.status(result.status).json(result);
+}
+
+// POST /technician/bookings/:id/payment-collected
+export async function technicianPaymentCollectedCtrl(
+	req: AuthRequest,
+	res: Response
+) {
+	const technicianUserId = req.user!.id;
+	const result = await technicianBookingService.paymentCollected(
+		technicianUserId,
+		req.params.id,
+		req.body
+	);
+	return res.status(result.status).json(result);
+}
+
 // Service areas
 // GET /technician/service-areas
 export async function listServiceAreasCtrl(req: AuthRequest, res: Response) {

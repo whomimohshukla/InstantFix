@@ -7,6 +7,7 @@ export const bookingRepo = {
     addressId: string;
     scheduledAt?: Date | null;
     notes?: string | null;
+    paymentMode?: string | null;
   }) {
     return prisma.booking.create({
       data: {
@@ -16,6 +17,7 @@ export const bookingRepo = {
         scheduledAt: data.scheduledAt ?? null,
         status: "PENDING" as any,
         notes: data.notes ?? null,
+        ...(data.paymentMode ? { paymentMode: data.paymentMode as any } : {}),
       },
       include: { service: true, address: true },
     });
@@ -38,6 +40,18 @@ export const bookingRepo = {
         reviews: true,
         payments: true,
         media: true,
+        technician: {
+          select: {
+            id: true,
+            name: true,
+            technicianProfile: {
+              select: {
+                ratingAvg: true,
+                ratingCount: true,
+              },
+            },
+          },
+        },
       },
     });
   },
