@@ -6,6 +6,8 @@ import {
   getMyBookingCtrl,
   cancelMyBookingCtrl,
   rateMyBookingCtrl,
+  openMyBookingDisputeCtrl,
+  getMyBookingDisputeCtrl,
 } from "../controllers/Booking.controllers";
 
 export const bookingRouter = Router();
@@ -17,3 +19,5 @@ bookingRouter.get("/me", listMyBookingsCtrl);
 bookingRouter.get("/me/:id", getMyBookingCtrl);
 bookingRouter.post("/:id/cancel", cancelMyBookingCtrl);
 bookingRouter.post("/:id/rating", rateMyBookingCtrl);
+bookingRouter.post("/:id/dispute", openMyBookingDisputeCtrl);
+bookingRouter.get("/:id/dispute", getMyBookingDisputeCtrl);

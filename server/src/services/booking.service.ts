@@ -151,4 +151,63 @@ export const bookingService = {
 
     return { ok: true, status: 200, data: result } as const;
   },
+  async openDispute(customerId: string, id: string, body: any) {
+		const reason = body?.reason ? String(body.reason) : null;
+		if (!reason)
+			return {
+				ok: false,
+				status: 400,
+				message: "reason required",
+			} as const;
+
+		const booking = await prisma.booking.findFirst({
+			where: { id, customerId },
+			select: { id: true, status: true },
+		});
+		if (!booking)
+			return { ok: false, status: 404, message: "Not found" } as const;
+		if (booking.status !== "COMPLETED" && booking.status !== "CANCELED") {
+			return {
+				ok: false,
+				status: 400,
+				message: "You can open a dispute only for completed or canceled bookings",
+			} as const;
+		}
+
+		const existing = await prisma.dispute.findUnique({
+			where: { bookingId: booking.id },
+		});
+		if (existing)
+			return {
+				ok: false,
+				status: 409,
+				message: "Dispute already exists for this booking",
+			} as const;
+
+		const created = await prisma.dispute.create({
+			data: {
+				bookingId: booking.id,
+				openedById: customerId,
+				reason,
+				status: "OPEN" as any,
+			},
+		});
+		return { ok: true, status: 201, data: created } as const;
+	},
+
+	async getDispute(customerId: string, id: string) {
+		const booking = await prisma.booking.findFirst({
+			where: { id, customerId },
+			select: { id: true },
+		});
+		if (!booking)
+			return { ok: false, status: 404, message: "Not found" } as const;
+
+		const dispute = await prisma.dispute.findUnique({
+			where: { bookingId: booking.id },
+		});
+		if (!dispute)
+			return { ok: false, status: 404, message: "Dispute not found" } as const;
+		return { ok: true, status: 200, data: dispute } as const;
+	},
 };

@@ -23,6 +23,7 @@ import { adminPaymentRouter } from "./routes/admin.payment.routes";
 import { adminNotificationRouter } from "./routes/admin.notification.routes";
 import { adminDashboardRouter } from "./routes/admin.dashboard.routes";
 import { adminAuditRouter } from "./routes/admin.audit.routes";
+import { adminDisputeRouter } from "./routes/admin.dispute.routes";
 import { razorpayWebhookRouter } from "./routes/webhook.razorpay.routes";
 import redis from "./config/redis";
 dotenv.config();
@@ -78,6 +79,7 @@ app.use("/admin", adminPaymentRouter);
 app.use("/admin", adminNotificationRouter);
 app.use("/admin", adminDashboardRouter);
 app.use("/admin", adminAuditRouter);
+app.use("/admin", adminDisputeRouter);
 app.use("/webhooks", razorpayWebhookRouter);
 
 // Wrap Express in HTTP server for Socket.IO

@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { AuthRequest } from "../middlewares/auth";
 import { userRepo } from "../repositories/user.repo";
+import { prisma } from "../lib/prisma";
 import { technicianBookingService } from "../services/technicianBooking.service";
 import { technicianOfferService } from "../services/technicianOffer.service";
 import { technicianEarningService } from "../services/technicianEarning.service";
@@ -31,6 +32,26 @@ export async function getOnboardingStatusCtrl(req: AuthRequest, res: Response) {
 	return res.json({ ok: true, status: { completed, required, profile } });
 }
 
+// GET /technician/profile (with media)
+export async function getMyTechnicianProfileCtrl(
+	req: AuthRequest,
+	res: Response
+) {
+	const userId = req.user!.id;
+	const profile = await userRepo.getTechnicianProfileByUserId(userId);
+	if (!profile)
+		return res
+			.status(404)
+			.json({ ok: false, message: "Technician profile not found" });
+
+	const media = await prisma.media.findMany({
+		where: { ownerType: "TECHNICIAN", ownerId: profile.id },
+		orderBy: { createdAt: "asc" },
+	});
+
+	return res.json({ ok: true, data: { profile, media } });
+}
+
 // PUT /technician/onboarding/update
 export async function updateOnboardingCtrl(req: AuthRequest, res: Response) {
 	const userId = req.user!.id;
@@ -59,6 +80,63 @@ export async function updateOnboardingCtrl(req: AuthRequest, res: Response) {
 			.status(400)
 			.json({ ok: false, message: "Unable to update profile" });
 	}
+}
+
+// POST /technician/profile/media
+export async function addTechnicianMediaCtrl(req: AuthRequest, res: Response) {
+	const userId = req.user!.id;
+	const { url, publicId, type, title } = req.body || {};
+	if (!url)
+		return res
+			.status(400)
+			.json({ ok: false, message: "url required" });
+
+	const profile = await userRepo.getTechnicianProfileByUserId(userId);
+	if (!profile)
+		return res
+			.status(404)
+			.json({ ok: false, message: "Technician profile not found" });
+
+	const media = await prisma.media.create({
+		data: {
+			ownerType: "TECHNICIAN",
+			ownerId: profile.id,
+			url,
+			publicId,
+			type: type || "IMAGE",
+			title,
+		},
+	});
+
+	return res.status(201).json({ ok: true, data: media });
+}
+
+// DELETE /technician/profile/media/:mediaId
+export async function deleteTechnicianMediaCtrl(
+	req: AuthRequest,
+	res: Response
+) {
+	const userId = req.user!.id;
+	const { mediaId } = req.params as { mediaId: string };
+	const profile = await userRepo.getTechnicianProfileByUserId(userId);
+	if (!profile)
+		return res
+			.status(404)
+			.json({ ok: false, message: "Technician profile not found" });
+
+	const deleted = await prisma.media.deleteMany({
+		where: {
+			id: mediaId,
+			ownerType: "TECHNICIAN",
+			ownerId: profile.id,
+		},
+	});
+	if (deleted.count === 0)
+		return res
+			.status(404)
+			.json({ ok: false, message: "Media not found" });
+
+	return res.json({ ok: true, message: "Deleted" });
 }
 
 // GET /technician/bookings

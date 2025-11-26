@@ -29,3 +29,25 @@ export async function rateMyBookingCtrl(req: AuthRequest, res: Response) {
 	const result = await bookingService.rate(req.user!.id, id, req.body);
 	return res.status(result.status).json(result);
 }
+
+export async function openMyBookingDisputeCtrl(
+	req: AuthRequest,
+	res: Response
+) {
+	const { id } = req.params;
+	const result = await bookingService.openDispute(
+		req.user!.id,
+		id,
+		req.body
+	);
+	return res.status(result.status).json(result);
+}
+
+export async function getMyBookingDisputeCtrl(
+	req: AuthRequest,
+	res: Response
+) {
+	const { id } = req.params;
+	const result = await bookingService.getDispute(req.user!.id, id);
+	return res.status(result.status).json(result);
+}

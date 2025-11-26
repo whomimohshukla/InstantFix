@@ -34,6 +34,11 @@ export const catalogService = {
         ? 0
         : allReviews.reduce((sum, r) => sum + r.rating, 0) / ratingCount;
 
+    const media = await prisma.media.findMany({
+      where: { ownerType: "SERVICE", ownerId: svc.id },
+      orderBy: { createdAt: "asc" },
+    });
+
     return {
       id: svc.id,
       name: svc.name,
@@ -48,6 +53,7 @@ export const catalogService = {
       },
       ratingAvg,
       ratingCount,
+      media,
     };
   },
 };

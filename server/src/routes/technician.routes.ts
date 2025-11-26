@@ -3,6 +3,9 @@ import { authJwt, requireRole } from "../middlewares/auth";
 import {
 	getOnboardingStatusCtrl,
 	updateOnboardingCtrl,
+	getMyTechnicianProfileCtrl,
+	addTechnicianMediaCtrl,
+	deleteTechnicianMediaCtrl,
 	listMyTechnicianBookingsCtrl,
 	getMyTechnicianBookingCtrl,
 	listMyOffersCtrl,
@@ -28,6 +31,11 @@ technicianRouter.use(authJwt, requireRole("TECHNICIAN"));
 // Onboarding
 technicianRouter.get("/onboarding/status", getOnboardingStatusCtrl);
 technicianRouter.post("/onboarding/update", updateOnboardingCtrl);
+
+// Profile & media
+technicianRouter.get("/profile", getMyTechnicianProfileCtrl);
+technicianRouter.post("/profile/media", addTechnicianMediaCtrl);
+technicianRouter.delete("/profile/media/:mediaId", deleteTechnicianMediaCtrl);
 
 // My bookings
 technicianRouter.get("/bookings", listMyTechnicianBookingsCtrl);

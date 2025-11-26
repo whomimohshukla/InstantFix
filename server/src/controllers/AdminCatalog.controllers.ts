@@ -21,6 +21,40 @@ export const adminCreateCategoryCtrl = async (req: Request, res: Response) => {
   }
   res.status(result.status).json(result);
 };
+
+// Service Media
+export const adminAddServiceMediaCtrl = async (req: Request, res: Response) => {
+  const serviceId = req.params.id;
+  const result = await adminCatalogService.addServiceMedia(serviceId, req.body);
+  if (result.ok) {
+    const actorId = (req as any).user?.id as string;
+    await logAdminAction({
+      actorId,
+      entityType: "ServiceMedia",
+      entityId: (result as any).data.id,
+      action: "CREATE",
+      diff: { serviceId, ...req.body },
+    });
+  }
+  res.status(result.status).json(result);
+};
+
+export const adminDeleteServiceMediaCtrl = async (req: Request, res: Response) => {
+  const serviceId = req.params.id;
+  const mediaId = req.params.mediaId;
+  const result = await adminCatalogService.deleteServiceMedia(serviceId, mediaId);
+  if (result.ok) {
+    const actorId = (req as any).user?.id as string;
+    await logAdminAction({
+      actorId,
+      entityType: "ServiceMedia",
+      entityId: mediaId,
+      action: "DELETE",
+      diff: { serviceId },
+    });
+  }
+  res.status(result.status).json(result);
+};
 export const adminUpdateCategoryCtrl = async (req: Request, res: Response) => {
   const result = await adminCatalogService.updateCategory(req.params.id, req.body);
   if (result.ok) {

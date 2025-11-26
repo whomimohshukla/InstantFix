@@ -1,11 +1,12 @@
 const OPENCAGE_API_KEY = process.env.OPENCAGE_API_KEY;
-const COUNTRY = process.env.OPENCAGE_COUNTRY;   // e.g., IN
+const COUNTRY = process.env.OPENCAGE_COUNTRY; // e.g., IN
 const LANGUAGE = process.env.OPENCAGE_LANGUAGE; // e.g., en
-const BOUNDS = process.env.OPENCAGE_BOUNDS;     // south,west,north,east
+const BOUNDS = process.env.OPENCAGE_BOUNDS; // south,west,north,east
 
 function buildParams() {
   const p: string[] = ["limit=1", "no_annotations=1"];
-  if (COUNTRY) p.push(`countrycode=${encodeURIComponent(COUNTRY.toLowerCase())}`);
+  if (COUNTRY)
+    p.push(`countrycode=${encodeURIComponent(COUNTRY.toLowerCase())}`);
   if (LANGUAGE) p.push(`language=${encodeURIComponent(LANGUAGE)}`);
   if (BOUNDS) p.push(`bounds=${encodeURIComponent(BOUNDS)}`);
   return p.join("&");
@@ -23,7 +24,9 @@ export type GeocodeResult = {
 export const geoService = {
   async geocodeAddress(q: string): Promise<GeocodeResult | null> {
     if (!q?.trim() || !OPENCAGE_API_KEY) return null;
-    const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(q)}&key=${OPENCAGE_API_KEY}&${buildParams()}`;
+    const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
+      q
+    )}&key=${OPENCAGE_API_KEY}&${buildParams()}`;
     const resp = await fetch(url);
     if (!resp.ok) return null;
     const json: any = await resp.json();
