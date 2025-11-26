@@ -139,6 +139,8 @@
         { "name": "Bookings: Get Mine by Id", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/bookings/me/{{bookingId}}" } },
         { "name": "Bookings: Cancel", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/bookings/{{bookingId}}/cancel", "body": {"mode":"raw","raw":"{\n  \"reason\": \"Changed my plans\"\n}" } } },
         { "name": "Bookings: Rate", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/bookings/{{bookingId}}/rating", "body": {"mode":"raw","raw":"{\n  \"rating\": 5,\n  \"comments\": \"Great service\"\n}" } } },
+        { "name": "Bookings: Open Dispute", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/bookings/{{bookingId}}/dispute", "body": {"mode":"raw","raw":"{\n  \"reason\": \"Technician was late and job incomplete\"\n}" } } },
+        { "name": "Bookings: Get Dispute", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/bookings/{{bookingId}}/dispute" } },
         { "name": "Payments: Create Razorpay Order", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/payments/razorpay/order", "body": {"mode":"raw","raw":"{\n  \"bookingId\": \"{{bookingId}}\"\n}" } } }
       ]
     },
@@ -147,6 +149,9 @@
       "item": [
         { "name": "Onboarding: Status", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/onboarding/status" } },
         { "name": "Onboarding: Update", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/technician/onboarding/update", "body": {"mode":"raw","raw":"{\n  \"headline\": \"AC Specialist\",\n  \"yearsExperience\": 5,\n  \"skills\": [\"AC\"],\n  \"hasVehicle\": true\n}" } } },
+        { "name": "Profile: Get My Technician Profile", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/profile" } },
+        { "name": "Profile: Add Media", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/technician/profile/media", "body": {"mode":"raw","raw":"{\n  \"url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\",\n  \"publicId\": \"instantfix/techs/demo\",\n  \"type\": \"IMAGE\",\n  \"title\": \"Sample job photo\"\n}" } } },
+        { "name": "Profile: Delete Media", "request": { "method": "DELETE", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/profile/media/{{mediaId}}" } },
         { "name": "Bookings: List My Jobs", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/bookings?status=&limit=20&skip=0" } },
         { "name": "Bookings: Get My Job", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/technician/bookings/{{bookingId}}" } },
         { "name": "Bookings: Update Status", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/technician/bookings/{{bookingId}}/status", "body": {"mode":"raw","raw":"{\n  \"status\": \"ENROUTE\"\n}" } } },
@@ -188,7 +193,9 @@
             { "name": "Services: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/catalog/services?categoryId={{categoryId}}" } },
             { "name": "Services: Create", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/catalog/services", "body": {"mode":"raw","raw":"{\n  \"categoryId\": \"{{categoryId}}\",\n  \"name\": \"AC Gas Refill\",\n  \"slug\": \"ac-gas-refill\",\n  \"basePrice\": 999\n}" } } },
             { "name": "Services: Update", "request": { "method": "PATCH", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/catalog/services/{{serviceId}}", "body": {"mode":"raw","raw":"{\n  \"isActive\": true\n}" } } },
-            { "name": "Services: Delete", "request": { "method": "DELETE", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/catalog/services/{{serviceId}}" } }
+            { "name": "Services: Delete", "request": { "method": "DELETE", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/catalog/services/{{serviceId}}" } },
+            { "name": "Services: Add Media", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/catalog/services/{{serviceId}}/media", "body": {"mode":"raw","raw":"{\n  \"url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\",\n  \"publicId\": \"instantfix/services/demo\",\n  \"type\": \"IMAGE\",\n  \"title\": \"Service hero image\"\n}" } } },
+            { "name": "Services: Delete Media", "request": { "method": "DELETE", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/catalog/services/{{serviceId}}/media/{{mediaId}}" } }
           ]
         },
         {
@@ -247,6 +254,14 @@
           "name": "Audit",
           "item": [
             { "name": "Audit Logs: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/audit-logs?limit=20&skip=0" } }
+          ]
+        },
+        {
+          "name": "Disputes",
+          "item": [
+            { "name": "Disputes: List", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/disputes?status=OPEN&limit=20&skip=0" } },
+            { "name": "Disputes: Get", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{base_url}}/admin/disputes/{{disputeId}}" } },
+            { "name": "Disputes: Resolve", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{base_url}}/admin/disputes/{{disputeId}}/resolve", "body": {"mode":"raw","raw":"{\n  \"status\": \"RESOLVED\",\n  \"resolution\": \"Refunded 50% due to poor service\",\n  \"createRefund\": true,\n  \"refundAmount\": 500\n}" } } }
           ]
         }
       ]
