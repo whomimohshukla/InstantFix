@@ -9,6 +9,8 @@ import {
 	acceptOfferCtrl,
 	rejectOfferCtrl,
 	updateTechnicianBookingStatusCtrl,
+	cancelTechnicianBookingCtrl,
+	technicianPaymentCollectedCtrl,
 	technicianEarningsSummaryCtrl,
 	technicianEarningsListCtrl,
 	listServiceAreasCtrl,
@@ -31,6 +33,11 @@ technicianRouter.post("/onboarding/update", updateOnboardingCtrl);
 technicianRouter.get("/bookings", listMyTechnicianBookingsCtrl);
 technicianRouter.get("/bookings/:id", getMyTechnicianBookingCtrl);
 technicianRouter.post("/bookings/:id/status", updateTechnicianBookingStatusCtrl);
+technicianRouter.post("/bookings/:id/cancel", cancelTechnicianBookingCtrl);
+technicianRouter.post(
+	"/bookings/:id/payment-collected",
+	technicianPaymentCollectedCtrl
+);
 
 // Earnings
 technicianRouter.get("/earnings/summary", technicianEarningsSummaryCtrl);
