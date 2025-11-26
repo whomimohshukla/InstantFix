@@ -78,6 +78,18 @@ export const adminPaymentService = {
       updated = await prisma.payment.update({ where: { id }, data: updates });
     }
 
+    // If payment is now succeeded, mark booking paymentStatus as PAID
+    if (updated.status === PaymentStatus.SUCCEEDED) {
+      try {
+        await prisma.booking.update({
+          where: { id: updated.bookingId },
+          data: { paymentStatus: "PAID" } as any,
+        });
+      } catch {
+        // best-effort; do not fail reconcile if booking update fails
+      }
+    }
+
     return {
       ok: true,
       status: 200,
@@ -87,4 +99,64 @@ export const adminPaymentService = {
       },
     } as const;
   },
+
+	async listTechCashEvents(query: any) {
+		const take = Math.min(parseInt(query?.limit || "20", 10) || 20, 100);
+		const skip = parseInt(query?.skip || "0", 10) || 0;
+		const processed =
+			query?.processed !== undefined
+				? query.processed === "true" || query.processed === true
+				: false;
+
+		const [rows, total] = await Promise.all([
+			prisma.eventOutbox.findMany({
+				where: { topic: "TECH_PAYMENT_COLLECTED", processed },
+				orderBy: { createdAt: "desc" },
+				take,
+				skip,
+			}),
+			prisma.eventOutbox.count({
+				where: { topic: "TECH_PAYMENT_COLLECTED", processed },
+			}),
+		]);
+
+		return { ok: true, status: 200, data: { rows, total, take, skip } } as const;
+	},
+
+	async markTechCashEventProcessed(id: string) {
+		const event = await prisma.eventOutbox.findUnique({ where: { id } });
+		if (!event)
+			return { ok: false, status: 404, message: "Event not found" } as const;
+		if (event.topic !== "TECH_PAYMENT_COLLECTED") {
+			return {
+				ok: false,
+				status: 400,
+				message: "Not a TECH_PAYMENT_COLLECTED event",
+			} as const;
+		}
+		if (event.processed) {
+			return { ok: true, status: 200, data: event } as const;
+		}
+
+		const updated = await prisma.eventOutbox.update({
+			where: { id },
+			data: { processed: true },
+		});
+
+		// Also mark the associated booking as PAID if bookingId is present in payload
+		const payload = (event as any).payload as any;
+		const bookingId = payload?.bookingId as string | undefined;
+		if (bookingId) {
+			try {
+				await prisma.booking.update({
+					where: { id: bookingId },
+					data: { paymentStatus: "PAID" } as any,
+				});
+			} catch {
+				// best-effort, ignore errors
+			}
+		}
+
+		return { ok: true, status: 200, data: updated } as const;
+	},
 };
