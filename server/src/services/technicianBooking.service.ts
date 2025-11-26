@@ -133,4 +133,74 @@ export const technicianBookingService = {
     });
     return { ok: true, status: 200, data: updated } as const;
   },
+
+	async cancelBooking(technicianUserId: string, id: string, body: any) {
+		const reason = body?.reason ? String(body.reason) : null;
+
+		const booking = await prisma.booking.findFirst({
+			where: { id, technicianId: technicianUserId },
+			select: { id: true, status: true, notes: true },
+		});
+		if (!booking)
+			return { ok: false, status: 404, message: "Not found" } as const;
+
+		if (booking.status === "COMPLETED" || booking.status === "CANCELED") {
+			return {
+				ok: false,
+				status: 400,
+				message: "Booking cannot be canceled at this stage",
+			} as const;
+		}
+
+		const newNotes = reason
+			? `${booking.notes ?? ""}\n[TECH_CANCEL] ${reason}`.trim()
+			: booking.notes ?? null;
+
+		const updated = await prisma.booking.update({
+			where: { id: booking.id },
+			data: { status: "CANCELED", notes: newNotes },
+		});
+
+		return { ok: true, status: 200, data: updated } as const;
+	},
+
+	async paymentCollected(technicianUserId: string, id: string, body: any) {
+		const amount = body?.amount != null ? Number(body.amount) : null;
+		if (amount != null && (!Number.isFinite(amount) || amount <= 0)) {
+			return {
+				ok: false,
+				status: 400,
+				message: "amount must be a positive number if provided",
+			} as const;
+		}
+
+		const booking = await prisma.booking.findFirst({
+			where: { id, technicianId: technicianUserId },
+			select: { id: true, status: true },
+		});
+		if (!booking)
+			return { ok: false, status: 404, message: "Not found" } as const;
+		if (booking.status !== "COMPLETED") {
+			return {
+				ok: false,
+				status: 400,
+				message: "Payment can be marked collected only for completed bookings",
+			} as const;
+		}
+
+		// Record an event for ops/admin to reconcile postpaid cash payments later
+		await prisma.eventOutbox.create({
+			data: {
+				topic: "TECH_PAYMENT_COLLECTED",
+				payload: {
+					bookingId: booking.id,
+					technicianUserId,
+					amount,
+					method: "CASH",
+				},
+			},
+		});
+
+		return { ok: true, status: 200, data: { bookingId: booking.id, amount } } as const;
+	},
 };
