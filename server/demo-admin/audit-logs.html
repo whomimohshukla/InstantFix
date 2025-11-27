@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Admin Demo - Audit Logs</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Admin</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./bookings.html">Bookings</a>
+        <a href="./disputes.html">Disputes</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./catalog.html">Catalog</a>
+        <a href="./technicians.html">Technicians</a>
+        <a href="./payments.html">Payments</a>
+        <a href="./users.html">Users</a>
+        <a href="./audit-logs.html" class="active">Audit logs</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Audit logs</h1>
+          <p class="muted">Internal record of admin actions.</p>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2 class="section-title">Recent actions</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Admin</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10:02</td>
+              <td>Super Admin</td>
+              <td>Resolved dispute D123 with partial refund.</td>
+            </tr>
+            <tr>
+              <td>09:55</td>
+              <td>Ops Manager</td>
+              <td>Reassigned booking FIX12346 to technician Rakesh.</td>
+            </tr>
+            <tr>
+              <td>09:40</td>
+              <td>Finance</td>
+              <td>Marked payout batch P2025-11-27 as PAID.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
