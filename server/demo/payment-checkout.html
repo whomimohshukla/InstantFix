@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Demo - Payment Checkout</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Fixlyo</div>
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./services.html">Services</a>
+      <a href="./bookings.html">My Bookings</a>
+      <a href="./profile.html">Profile</a>
+    </nav>
+  </header>
+
+  <main class="page wide">
+    <section class="section two-cols">
+      <div>
+        <h1>Checkout</h1>
+        <p class="muted">In real app this would call POST /payments/razorpay/order for the booking.</p>
+
+        <div class="card">
+          <h2>Order summary</h2>
+          <p><strong>AC Gas Refill</strong></p>
+          <p class="muted">Booking ID · #FIX12345</p>
+          <hr style="margin:0.75rem 0;border:none;border-top:1px solid var(--border);" />
+          <p>Service charge: ₹900</p>
+          <p>Tax & fees: ₹100</p>
+          <p><strong>Total payable: ₹1,000</strong></p>
+        </div>
+      </div>
+      <div>
+        <h2>Pay securely</h2>
+        <p class="muted">Here you would show Razorpay Checkout or a card/UPI selection UI.</p>
+        <div class="card">
+          <button class="btn primary" style="width:100%;margin-bottom:0.5rem;">Pay with Razorpay</button>
+          <button class="btn" style="width:100%;">Change payment method</button>
+        </div>
+        <p class="muted" style="margin-top:0.5rem;">On success, redirect to a payment success screen and then back to booking detail.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

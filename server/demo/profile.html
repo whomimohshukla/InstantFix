@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Demo - Profile</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Fixlyo</div>
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./services.html">Services</a>
+      <a href="./bookings.html">My Bookings</a>
+      <a href="./profile.html" class="active">Profile</a>
+    </nav>
+  </header>
+
+  <main class="page wide">
+    <section class="section two-cols">
+      <div>
+        <h1>My profile</h1>
+        <form class="form">
+          <label>
+            Name
+            <input type="text" placeholder="Rahul" />
+          </label>
+          <label>
+            Email
+            <input type="email" placeholder="user@example.com" />
+          </label>
+          <label>
+            Phone
+            <input type="tel" placeholder="+91 98765 43210" />
+          </label>
+          <button class="btn primary" type="submit">Save changes</button>
+        </form>
+      </div>
+      <div>
+        <h2>Addresses</h2>
+        <p class="muted">This would use /me/addresses in the real app.</p>
+        <div class="card small">
+          <strong>Home</strong>
+          <p>HSR Layout, 560102</p>
+        </div>
+        <button class="btn">Manage addresses</button>
+
+        <h2>Notifications</h2>
+        <div class="card small">
+          <label class="inline">
+            <input type="checkbox" checked /> Email updates
+          </label>
+          <label class="inline">
+            <input type="checkbox" /> SMS updates
+          </label>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

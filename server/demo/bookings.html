@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Demo - My Bookings</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Fixlyo</div>
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./services.html">Services</a>
+      <a href="./bookings.html" class="active">My Bookings</a>
+      <a href="./profile.html">Profile</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="section">
+      <h1>My bookings</h1>
+      <p class="muted">In the real app this would call GET /bookings/me.</p>
+      <div class="list bookings">
+        <a class="booking-row" href="./booking-detail.html?id=1">
+          <div>
+            <strong>AC Gas Refill</strong>
+            <div class="muted">HSR Layout · 26 Nov, 6:00 PM</div>
+          </div>
+          <div class="status-pill status-confirmed">CONFIRMED</div>
+        </a>
+        <a class="booking-row" href="./booking-detail.html?id=2">
+          <div>
+            <strong>Fan Installation</strong>
+            <div class="muted">Koramangala · 25 Nov, 4:00 PM</div>
+          </div>
+          <div class="status-pill status-completed">COMPLETED</div>
+        </a>
+        <a class="booking-row" href="./booking-detail.html?id=3">
+          <div>
+            <strong>Plumbing Leak Fix</strong>
+            <div class="muted">BTM · 24 Nov, 11:00 AM</div>
+          </div>
+          <div class="status-pill status-canceled">CANCELED</div>
+        </a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

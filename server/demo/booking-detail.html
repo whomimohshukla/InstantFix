@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Demo - Booking Detail</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Fixlyo</div>
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./services.html">Services</a>
+      <a href="./bookings.html" class="active">My Bookings</a>
+      <a href="./profile.html">Profile</a>
+    </nav>
+  </header>
+
+  <main class="page wide">
+    <section class="section two-cols">
+      <div>
+        <h1>AC Gas Refill</h1>
+        <p class="muted">Booking ID · #FIX12345</p>
+        <div class="status-pill status-completed">COMPLETED</div>
+
+        <h2>Address</h2>
+        <p>Rahul · HSR Layout, 560102<br />Near BDA Complex</p>
+
+        <h2>Price</h2>
+        <p>Final price: ₹1,000</p>
+      </div>
+      <div>
+        <h2>Technician</h2>
+        <p><strong>Rakesh Kumar</strong><br />4.7 ★ · 120 jobs</p>
+
+        <h2>Status timeline</h2>
+        <ol class="timeline">
+          <li class="done">Booking placed</li>
+          <li class="done">Technician assigned</li>
+          <li class="done">Technician en route</li>
+          <li class="done">Work in progress</li>
+          <li class="done">Completed</li>
+        </ol>
+
+        <h2>Actions</h2>
+        <button class="btn" disabled>Cancel booking</button>
+
+        <h3>Rate this booking</h3>
+        <p class="muted">In real app this posts to POST /bookings/:id/rating.</p>
+        <div class="rating-input">
+          ★★★★★
+        </div>
+        <textarea rows="3" placeholder="Write a short review..."></textarea>
+        <button class="btn primary">Submit rating</button>
+
+        <h3>Dispute</h3>
+        <p class="muted">If something went wrong, you can raise a dispute.</p>
+        <button class="btn">Open dispute</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

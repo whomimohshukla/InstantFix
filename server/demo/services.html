@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Demo - Services</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Fixlyo</div>
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./services.html" class="active">Services</a>
+      <a href="./bookings.html">My Bookings</a>
+      <a href="./profile.html">Profile</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="section">
+      <div class="section-header">
+        <h1>Choose a service</h1>
+        <input class="search" type="search" placeholder="Search AC repair, electrician, plumber..." />
+      </div>
+
+      <h2 id="ac">AC Services</h2>
+      <div class="grid services">
+        <a class="card" href="./service-detail.html?id=ac-repair">
+          <h3>AC Repair & Service</h3>
+          <p>From ₹499 · 4.7 ★ (230)</p>
+        </a>
+        <a class="card" href="./service-detail.html?id=ac-gas-refill">
+          <h3>AC Gas Refill</h3>
+          <p>From ₹999 · 4.6 ★ (120)</p>
+        </a>
+      </div>
+
+      <h2 id="electrician">Electrician</h2>
+      <div class="grid services">
+        <a class="card" href="./service-detail.html?id=fan-installation">
+          <h3>Fan Installation</h3>
+          <p>From ₹249 · 4.8 ★ (90)</p>
+        </a>
+        <a class="card" href="./service-detail.html?id=light-fittings">
+          <h3>Light Fittings</h3>
+          <p>From ₹199 · 4.5 ★ (60)</p>
+        </a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

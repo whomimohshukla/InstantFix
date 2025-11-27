@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Demo - New Booking</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Fixlyo</div>
+    <nav class="nav">
+      <a href="./index.html">Home</a>
+      <a href="./services.html">Services</a>
+      <a href="./bookings.html" class="active">My Bookings</a>
+      <a href="./profile.html">Profile</a>
+    </nav>
+  </header>
+
+  <main class="page narrow">
+    <h1>Book service</h1>
+    <p>Imagine this is pre-filled with the selected service and your saved addresses.</p>
+
+    <form class="form">
+      <label>
+        Service
+        <select>
+          <option>AC Gas Refill</option>
+          <option>AC Repair & Service</option>
+        </select>
+      </label>
+
+      <label>
+        Address
+        <select>
+          <option>Home · HSR Layout, 560102</option>
+          <option>Office · Koramangala, 560095</option>
+        </select>
+      </label>
+
+      <label>
+        Scheduled time (optional)
+        <input type="datetime-local" />
+      </label>
+
+      <label>
+        Notes for technician
+        <textarea rows="3" placeholder="E.g. Please come after 6 PM"></textarea>
+      </label>
+
+      <fieldset>
+        <legend>Payment mode</legend>
+        <label class="inline">
+          <input type="radio" name="paymentMode" checked /> Online prepaid
+        </label>
+        <label class="inline">
+          <input type="radio" name="paymentMode" /> Pay after service (cash)
+        </label>
+      </fieldset>
+
+      <button class="btn primary" type="submit">Confirm booking</button>
+    </form>
+  </main>
+</body>
+</html>
