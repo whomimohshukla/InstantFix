@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Technician Demo - Jobs</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Tech</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./jobs.html" class="active">Jobs</a>
+        <a href="./earnings.html">Earnings</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./availability.html">Availability</a>
+        <a href="./portfolio.html">Portfolio</a>
+        <a href="./profile.html">Profile</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Jobs</h1>
+          <p class="muted">View and update bookings assigned to you.</p>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2 class="section-title">Today</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Service</th>
+              <th>Customer</th>
+              <th>Area</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10:00</td>
+              <td><a href="./job-detail.html">AC Gas Refill</a></td>
+              <td>Rahul</td>
+              <td>HSR Layout</td>
+              <td><span class="status-pill status-enroute">ENROUTE</span></td>
+            </tr>
+            <tr>
+              <td>13:00</td>
+              <td><a href="./job-detail.html">Fan Installation</a></td>
+              <td>Neha</td>
+              <td>Koramangala</td>
+              <td><span class="status-pill status-inprogress">IN_PROGRESS</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

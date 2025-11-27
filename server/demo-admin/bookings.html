@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Admin Demo - Bookings</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Admin</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./bookings.html" class="active">Bookings</a>
+        <a href="./disputes.html">Disputes</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./catalog.html">Catalog</a>
+        <a href="./technicians.html">Technicians</a>
+        <a href="./payments.html">Payments</a>
+        <a href="./users.html">Users</a>
+        <a href="./audit-logs.html">Audit logs</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Bookings</h1>
+          <p class="muted">View and manage all customer bookings.</p>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2 class="section-title">Recent bookings</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Customer</th>
+              <th>Service</th>
+              <th>Area</th>
+              <th>Status</th>
+              <th>Technician</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="./booking-detail.html">FIX12345</a></td>
+              <td>Rahul</td>
+              <td>AC Gas Refill</td>
+              <td>HSR Layout</td>
+              <td><span class="status-pill status-confirmed">CONFIRMED</span></td>
+              <td>Rakesh</td>
+            </tr>
+            <tr>
+              <td><a href="./booking-detail.html">FIX12346</a></td>
+              <td>Neha</td>
+              <td>Fan Installation</td>
+              <td>Koramangala</td>
+              <td><span class="status-pill status-pending">PENDING</span></td>
+              <td>Unassigned</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

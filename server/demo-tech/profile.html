@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Technician Demo - Profile</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Tech</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./jobs.html">Jobs</a>
+        <a href="./earnings.html">Earnings</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./availability.html">Availability</a>
+        <a href="./portfolio.html">Portfolio</a>
+        <a href="./profile.html" class="active">Profile</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Profile & verification</h1>
+          <p class="muted">Pulls from technician profile + KYC status in backend.</p>
+        </div>
+      </header>
+
+      <section class="grid two">
+        <div class="card">
+          <h2 class="section-title">Basic details</h2>
+          <form class="form">
+            <label>
+              Name
+              <input type="text" placeholder="Rakesh Kumar" />
+            </label>
+            <label>
+              Primary skills
+              <input type="text" placeholder="AC, Refrigerator" />
+            </label>
+            <label>
+              Experience (years)
+              <input type="number" placeholder="5" />
+            </label>
+          </form>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Verification</h2>
+          <ul class="list">
+            <li>KYC: Verified</li>
+            <li>Background check: Completed</li>
+            <li>Profile status: Active</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

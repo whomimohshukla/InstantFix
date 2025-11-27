@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Admin Demo - Catalog</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Admin</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./bookings.html">Bookings</a>
+        <a href="./disputes.html">Disputes</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./catalog.html" class="active">Catalog</a>
+        <a href="./technicians.html">Technicians</a>
+        <a href="./payments.html">Payments</a>
+        <a href="./users.html">Users</a>
+        <a href="./audit-logs.html">Audit logs</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Service catalog</h1>
+          <p class="muted">Manage categories, services and media.</p>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2 class="section-title">Services</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Base price</th>
+              <th>Status</th>
+              <th>Media</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>AC Gas Refill</td>
+              <td>AC Services</td>
+              <td>₹999</td>
+              <td><span class="status-pill status-confirmed">ACTIVE</span></td>
+              <td>3 images</td>
+            </tr>
+            <tr>
+              <td>Fan Installation</td>
+              <td>Electrician</td>
+              <td>₹249</td>
+              <td><span class="status-pill status-confirmed">ACTIVE</span></td>
+              <td>2 images</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

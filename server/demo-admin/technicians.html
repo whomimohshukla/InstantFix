@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Admin Demo - Technicians</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Admin</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./bookings.html">Bookings</a>
+        <a href="./disputes.html">Disputes</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./catalog.html">Catalog</a>
+        <a href="./technicians.html" class="active">Technicians</a>
+        <a href="./payments.html">Payments</a>
+        <a href="./users.html">Users</a>
+        <a href="./audit-logs.html">Audit logs</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Technicians</h1>
+          <p class="muted">Verification, ratings, and activation status.</p>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2 class="section-title">All technicians</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>City</th>
+              <th>Skills</th>
+              <th>Rating</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="./technician-detail.html">Rakesh Kumar</a></td>
+              <td>Bengaluru</td>
+              <td>AC, Refrigerator</td>
+              <td>4.7 ★</td>
+              <td><span class="status-pill status-confirmed">ACTIVE</span></td>
+            </tr>
+            <tr>
+              <td><a href="./technician-detail.html">Anita Sharma</a></td>
+              <td>Bengaluru</td>
+              <td>Plumbing</td>
+              <td>4.5 ★</td>
+              <td><span class="status-pill status-pending">PENDING_VERIFICATION</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

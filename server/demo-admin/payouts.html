@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Admin Demo - Payouts</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Admin</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./bookings.html">Bookings</a>
+        <a href="./disputes.html">Disputes</a>
+        <a href="./payouts.html" class="active">Payouts</a>
+        <a href="./catalog.html">Catalog</a>
+        <a href="./technicians.html">Technicians</a>
+        <a href="./payments.html">Payments</a>
+        <a href="./users.html">Users</a>
+        <a href="./audit-logs.html">Audit logs</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Payouts</h1>
+          <p class="muted">Admin view of technician payout batches created from unpaid earnings.</p>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2 class="section-title">Payout batches</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Batch ID</th>
+              <th>Date</th>
+              <th>Technicians</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>P2025-11-27</td>
+              <td>27 Nov</td>
+              <td>34</td>
+              <td>₹1,45,000</td>
+              <td><span class="status-pill status-confirmed">PAID</span></td>
+            </tr>
+            <tr>
+              <td>P2025-11-20</td>
+              <td>20 Nov</td>
+              <td>29</td>
+              <td>₹1,18,500</td>
+              <td><span class="status-pill status-confirmed">PAID</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

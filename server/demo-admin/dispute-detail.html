@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Admin Demo - Dispute Detail</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Admin</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./bookings.html">Bookings</a>
+        <a href="./disputes.html" class="active">Disputes</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./catalog.html">Catalog</a>
+        <a href="./technicians.html">Technicians</a>
+        <a href="./payments.html">Payments</a>
+        <a href="./users.html">Users</a>
+        <a href="./audit-logs.html">Audit logs</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Dispute D123</h1>
+          <p class="muted">Booking FIX12345 · AC Gas Refill · Raised by Rahul</p>
+        </div>
+        <span class="badge">Status: OPEN</span>
+      </header>
+
+      <section class="grid two" style="margin-bottom:1rem;">
+        <div class="card">
+          <h2 class="section-title">Customer claim</h2>
+          <p class="muted">Customer message:</p>
+          <p>Cooling improved but still not as expected. Technician left early.</p>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Technician response</h2>
+          <p class="muted">In real app this would be optional tech comment.</p>
+          <p>Suggested second visit, customer requested refund instead.</p>
+        </div>
+      </section>
+
+      <section class="grid two">
+        <div class="card">
+          <h2 class="section-title">Booking & payment</h2>
+          <ul class="list">
+            <li>Amount: ₹1,000</li>
+            <li>Payment mode: Online prepaid</li>
+            <li>Payment status: Captured</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Resolve dispute</h2>
+          <p class="muted">Maps to your adminDispute.service: resolve with optional refund.</p>
+          <button class="btn primary" style="margin-right:0.4rem;">Resolve with ₹300 refund</button>
+          <button class="btn">Reject dispute</button>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

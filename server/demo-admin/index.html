@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Admin Demo - Dashboard</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Admin</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html" class="active">Dashboard</a>
+        <a href="./bookings.html">Bookings</a>
+        <a href="./disputes.html">Disputes</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./catalog.html">Catalog</a>
+        <a href="./technicians.html">Technicians</a>
+        <a href="./payments.html">Payments</a>
+        <a href="./users.html">Users</a>
+        <a href="./audit-logs.html">Audit logs</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Overview</h1>
+          <p class="muted">Snapshot of todays demand, supply, and payment flows.</p>
+        </div>
+        <span class="badge">Role: ADMIN</span>
+      </header>
+
+      <section class="grid two" style="margin-bottom:1rem;">
+        <div class="card">
+          <h3>Todays bookings</h3>
+          <p><strong>64</strong> total · <strong>12</strong> in progress</p>
+        </div>
+        <div class="card">
+          <h3>Revenue (today)</h3>
+          <p><strong>₹1,25,000</strong> gross · <span class="muted">₹18,000 technician share</span></p>
+        </div>
+      </section>
+
+      <section class="grid two" style="margin-bottom:1rem;">
+        <div class="card">
+          <h2 class="section-title">Live operations</h2>
+          <ul class="list">
+            <li>Bookings awaiting confirmation: 5</li>
+            <li>Bookings without technician assigned: 3</li>
+            <li>Technicians online: 42</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Risk & support</h2>
+          <ul class="list">
+            <li>Open disputes: 4</li>
+            <li>Refunds pending review: 2</li>
+            <li>Payments flagged for manual check: 1</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="section-title">Recent activity</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Type</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>09:45</td>
+              <td>Booking</td>
+              <td>New AC Gas Refill booking created in HSR Layout.</td>
+            </tr>
+            <tr>
+              <td>09:30</td>
+              <td>Dispute</td>
+              <td>Dispute #D123 resolved with partial refund.</td>
+            </tr>
+            <tr>
+              <td>09:20</td>
+              <td>Payout</td>
+              <td>Payout batch P2025-11-27 generated for 34 technicians.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

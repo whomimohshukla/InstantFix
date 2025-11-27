@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Admin Demo - Users</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Admin</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./bookings.html">Bookings</a>
+        <a href="./disputes.html">Disputes</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./catalog.html">Catalog</a>
+        <a href="./technicians.html">Technicians</a>
+        <a href="./payments.html">Payments</a>
+        <a href="./users.html" class="active">Users</a>
+        <a href="./audit-logs.html">Audit logs</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Users</h1>
+          <p class="muted">Customers and technicians with basic status.</p>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2 class="section-title">Users</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Rahul</td>
+              <td><span class="chip">CUSTOMER</span></td>
+              <td><span class="status-pill status-confirmed">ACTIVE</span></td>
+            </tr>
+            <tr>
+              <td>Rakesh Kumar</td>
+              <td><span class="chip">TECHNICIAN</span></td>
+              <td><span class="status-pill status-confirmed">ACTIVE</span></td>
+            </tr>
+            <tr>
+              <td>Super Admin</td>
+              <td><span class="chip">ADMIN</span></td>
+              <td><span class="status-pill status-confirmed">ACTIVE</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

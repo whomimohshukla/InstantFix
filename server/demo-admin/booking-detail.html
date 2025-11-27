@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Admin Demo - Booking Detail</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Admin</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./bookings.html" class="active">Bookings</a>
+        <a href="./disputes.html">Disputes</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./catalog.html">Catalog</a>
+        <a href="./technicians.html">Technicians</a>
+        <a href="./payments.html">Payments</a>
+        <a href="./users.html">Users</a>
+        <a href="./audit-logs.html">Audit logs</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Booking FIX12345</h1>
+          <p class="muted">AC Gas Refill · HSR Layout · 26 Nov, 10:00 AM</p>
+        </div>
+        <span class="badge">Status: CONFIRMED</span>
+      </header>
+
+      <section class="grid two" style="margin-bottom:1rem;">
+        <div class="card">
+          <h2 class="section-title">Customer</h2>
+          <ul class="list">
+            <li>Name: Rahul</li>
+            <li>Phone: +91 98765 43210</li>
+            <li>Address: HSR Layout, 560102</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Technician</h2>
+          <ul class="list">
+            <li>Name: Rakesh Kumar</li>
+            <li>Rating: 4.7 ★</li>
+            <li>Status: Online</li>
+          </ul>
+          <button class="btn" style="margin-top:0.4rem;">Reassign technician</button>
+        </div>
+      </section>
+
+      <section class="grid two">
+        <div class="card">
+          <h2 class="section-title">Payment</h2>
+          <ul class="list">
+            <li>Mode: Online prepaid</li>
+            <li>Amount: ₹1,000</li>
+            <li>Gateway: Razorpay</li>
+            <li>Status: Captured</li>
+          </ul>
+          <button class="btn danger" style="margin-top:0.4rem;">Initiate refund</button>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Admin actions</h2>
+          <p class="muted">These map to your adminBooking.service: confirm, cancel, move status, dispatch.</p>
+          <div style="margin-top:0.4rem;">
+            <button class="btn primary">Mark CONFIRMED</button>
+            <button class="btn" style="margin-left:0.4rem;">Mark CANCELED</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Technician Demo - Orders Summary</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Tech</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./jobs.html">Jobs</a>
+        <a href="./orders.html" class="active">Orders summary</a>
+        <a href="./earnings.html">Earnings</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./availability.html">Availability</a>
+        <a href="./portfolio.html">Portfolio</a>
+        <a href="./profile.html">Profile</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Orders summary</h1>
+          <p class="muted">Overview of active and completed bookings youve handled.</p>
+        </div>
+      </header>
+
+      <section class="grid two" style="margin-bottom:1rem;">
+        <div class="card">
+          <h3>This month</h3>
+          <p><strong>22</strong> jobs · <strong>₹18,500</strong> earnings</p>
+        </div>
+        <div class="card">
+          <h3>All time</h3>
+          <p><strong>184</strong> jobs · <strong>₹1,35,000</strong> earnings</p>
+        </div>
+      </section>
+
+      <section class="card" style="margin-bottom:1rem;">
+        <h2 class="section-title">Active orders</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Booking</th>
+              <th>Service</th>
+              <th>Area</th>
+              <th>Status</th>
+              <th>Payment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Today</td>
+              <td>#FIX12345</td>
+              <td>AC Gas Refill</td>
+              <td>HSR Layout</td>
+              <td><span class="status-pill status-enroute">ENROUTE</span></td>
+              <td>Pay to technician</td>
+            </tr>
+            <tr>
+              <td>Today</td>
+              <td>#FIX12346</td>
+              <td>Fan Installation</td>
+              <td>Koramangala</td>
+              <td><span class="status-pill status-inprogress">IN_PROGRESS</span></td>
+              <td>Online prepaid</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2 class="section-title">Completed orders</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Booking</th>
+              <th>Service</th>
+              <th>Amount</th>
+              <th>Rating</th>
+              <th>Payment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>26 Nov</td>
+              <td>#FIX12321</td>
+              <td>AC Service</td>
+              <td>₹550</td>
+              <td>5 ★</td>
+              <td>Online prepaid</td>
+            </tr>
+            <tr>
+              <td>25 Nov</td>
+              <td>#FIX12310</td>
+              <td>Plumbing Leak Fix</td>
+              <td>₹650</td>
+              <td>4 ★</td>
+              <td>Cash to technician</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

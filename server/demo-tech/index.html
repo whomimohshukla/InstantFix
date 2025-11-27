@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Technician Demo - Dashboard</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Tech</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html" class="active">Dashboard</a>
+        <a href="./jobs.html">Jobs</a>
+        <a href="./orders.html">Orders summary</a>
+        <a href="./earnings.html">Earnings</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./availability.html">Availability</a>
+        <a href="./portfolio.html">Portfolio</a>
+        <a href="./profile.html">Profile</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Today at a glance</h1>
+          <p class="muted">Snapshot of todays jobs, earnings and performance.</p>
+        </div>
+        <span class="badge">Live · Online</span>
+      </header>
+
+      <section class="grid two" style="margin-bottom:1.25rem;">
+        <div class="card">
+          <h3>Todays jobs</h3>
+          <p><strong>3</strong> assigned · <strong>1</strong> completed</p>
+        </div>
+        <div class="card">
+          <h3>Todays earnings</h3>
+          <p><strong>₹1,800</strong> expected</p>
+        </div>
+      </section>
+
+      <section class="card" style="margin-bottom:1.25rem;">
+        <h2 class="section-title">Upcoming jobs</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Service</th>
+              <th>Area</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10:00</td>
+              <td>AC Gas Refill</td>
+              <td>HSR Layout</td>
+              <td><span class="status-pill status-enroute">ENROUTE</span></td>
+            </tr>
+            <tr>
+              <td>13:00</td>
+              <td>Fan Installation</td>
+              <td>Koramangala</td>
+              <td><span class="status-pill status-inprogress">IN_PROGRESS</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="grid two">
+        <div class="card">
+          <h2 class="section-title">Performance</h2>
+          <ul class="list">
+            <li>Rating: 4.7 ★</li>
+            <li>Jobs completed: 128</li>
+            <li>Cancellation rate: 1.2%</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Quick actions</h2>
+          <button class="btn primary">Go online</button>
+          <button class="btn" style="margin-left:0.4rem;">Pause new jobs</button>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

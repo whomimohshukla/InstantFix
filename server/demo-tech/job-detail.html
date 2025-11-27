@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Technician Demo - Job Detail</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Tech</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./jobs.html" class="active">Jobs</a>
+        <a href="./earnings.html">Earnings</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./availability.html">Availability</a>
+        <a href="./portfolio.html">Portfolio</a>
+        <a href="./profile.html">Profile</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">AC Gas Refill</h1>
+          <p class="muted">Booking #FIX12345 · 26 Nov, 10:00 AM</p>
+        </div>
+        <span class="badge">ENROUTE</span>
+      </header>
+
+      <section class="grid two" style="margin-bottom:1rem;">
+        <div class="card">
+          <h2 class="section-title">Customer & address</h2>
+          <p><strong>Rahul</strong></p>
+          <p class="muted">HSR Layout, 560102<br />Near BDA Complex</p>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Booking details</h2>
+          <ul class="list">
+            <li>Service: AC Gas Refill</li>
+            <li>Payment mode: Pay to technician (cash / UPI)</li>
+            <li>Amount to collect: ₹1,000</li>
+            <li>Expected payout to you: ₹600</li>
+            <li>Notes: Please call 10 minutes before.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="grid two">
+        <div class="card">
+          <h2 class="section-title">Update status</h2>
+          <p class="muted">In real app these map to technician booking status API.</p>
+          <div style="margin-top:0.4rem;">
+            <button class="btn primary">Mark ENROUTE</button>
+            <button class="btn" style="margin-left:0.4rem;">Mark IN_PROGRESS</button>
+            <button class="btn" style="margin-left:0.4rem;">Mark COMPLETED</button>
+          </div>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Payment collection</h2>
+          <p class="muted">Customer will see QR / UPI options in their app. You only confirm once cash/UPI is received.</p>
+          <button class="btn primary" style="margin-top:0.4rem;">Confirm cash / UPI collected</button>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

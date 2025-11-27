@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fixlyo Admin Demo - Payments</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Fixlyo Admin</div>
+      <nav class="sidebar-nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./bookings.html">Bookings</a>
+        <a href="./disputes.html">Disputes</a>
+        <a href="./payouts.html">Payouts</a>
+        <a href="./catalog.html">Catalog</a>
+        <a href="./technicians.html">Technicians</a>
+        <a href="./payments.html" class="active">Payments</a>
+        <a href="./users.html">Users</a>
+        <a href="./audit-logs.html">Audit logs</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div>
+          <h1 class="page-title">Payments</h1>
+          <p class="muted">Razorpay payments and refunds overview.</p>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2 class="section-title">Recent payments</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Booking</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Method</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>pay_12345</td>
+              <td>FIX12345</td>
+              <td>₹1,000</td>
+              <td><span class="status-pill status-confirmed">CAPTURED</span></td>
+              <td>UPI</td>
+            </tr>
+            <tr>
+              <td>pay_12346</td>
+              <td>FIX12321</td>
+              <td>₹799</td>
+              <td><span class="status-pill status-confirmed">CAPTURED</span></td>
+              <td>Card</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
