@@ -1,13 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 0);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-30 border-b border-primary-100/60 bg-cream-100/95 backdrop-blur-md">
+    <header
+      className={`fixed inset-x-0 top-0 z-30 border-b backdrop-blur-md transition-colors ${
+        scrolled
+          ? "border-primary-200/80 bg-cream-100 shadow-sm"
+          : "border-primary-100/60 bg-cream-100/95"
+      }`}
+    >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left: logo + brand */}
         <Link href="/" className="flex items-center gap-2">
@@ -24,14 +41,14 @@ export default function Navbar() {
 
         {/* Center: location + search (desktop) */}
         <div className="hidden flex-1 items-center justify-center gap-3 md:flex">
-          <button className="flex min-w-[200px] max-w-xs items-center gap-2 rounded-md border border-primary-100 bg-white px-3 py-2 text-[12px] text-primary-700 shadow-sm transition hover:border-primary-300 hover:bg-primary-50">
+          <button className="flex min-w-[200px] max-w-xs items-center gap-2 rounded-md border border-primary-100 bg-white px-3 py-2 text-[12px] text-primary-700 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-300 hover:bg-primary-50">
             <span className="text-[15px] text-primary-300">📍</span>
             <span className="flex flex-col leading-tight text-left">
               <span className="font-semibold text-primary-700">Select area</span>
               <span className="text-[11px] text-primary-400">e.g. HSR Layout</span>
             </span>
           </button>
-          <div className="flex max-w-md flex-1 items-center gap-2 rounded-md border border-primary-100 bg-white px-3 py-2 text-[13px] text-primary-700 shadow-sm">
+          <div className="flex max-w-md flex-1 items-center gap-2 rounded-md border border-primary-100 bg-white px-3 py-2 text-[13px] text-primary-700 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-300 hover:bg-primary-50">
             <span className="text-[15px] text-primary-300">🔍</span>
             <input
               className="w-full bg-transparent text-[13px] text-primary-700 outline-none placeholder:text-primary-300"
@@ -44,7 +61,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="hidden h-8 w-8 items-center justify-center rounded-full border border-primary-100 bg-cream-50 text-[16px] text-primary-700 shadow-sm hover:border-primary-300 hover:bg-primary-50 md:flex"
+            className="hidden h-8 w-8 items-center justify-center rounded-full border border-primary-100 bg-cream-50 text-[16px] text-primary-700 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-300 hover:bg-primary-50 md:flex"
             aria-label="View cart"
           >
             🛒
@@ -60,7 +77,7 @@ export default function Navbar() {
           {/* Mobile menu toggle */}
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-primary-200 bg-cream-50 text-primary-700 shadow-sm md:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-primary-200 bg-cream-50 text-primary-700 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-300 hover:bg-primary-50 md:hidden"
             onClick={() => setOpen((prev) => !prev)}
             aria-label="Toggle navigation"
           >
@@ -83,11 +100,11 @@ export default function Navbar() {
       {open && (
         <nav className="mx-auto mt-2 max-w-6xl px-4 pb-3 sm:px-6 lg:px-8 md:hidden">
           <div className="space-y-2 rounded-xl border border-primary-100 bg-cream-50 p-3 text-sm text-primary-700 shadow-sm">
-            <button className="flex w-full items-center gap-2 rounded-md border border-primary-100 bg-white px-3 py-2 text-[12px] hover:border-primary-300 hover:bg-primary-50">
+            <button className="flex w-full items-center gap-2 rounded-md border border-primary-100 bg-white px-3 py-2 text-[12px] transition hover:-translate-y-0.5 hover:border-primary-300 hover:bg-primary-50">
               <span className="text-[15px] text-primary-300">📍</span>
               <span className="truncate">Select area</span>
             </button>
-            <div className="flex items-center gap-2 rounded-md border border-primary-100 bg-white px-3 py-2 text-[13px]">
+            <div className="flex items-center gap-2 rounded-md border border-primary-100 bg-white px-3 py-2 text-[13px] transition hover:-translate-y-0.5 hover:border-primary-300 hover:bg-primary-50">
               <span className="text-[15px] text-primary-300">🔍</span>
               <input
                 className="w-full bg-transparent text-[13px] text-primary-700 outline-none placeholder:text-primary-300"
