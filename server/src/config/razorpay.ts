@@ -4,12 +4,13 @@ const keyId = process.env.RAZORPAY_KEY_ID;
 const keySecret = process.env.RAZORPAY_KEY_SECRET;
 
 if (!keyId || !keySecret) {
-  console.warn("[Razorpay] RAZORPAY_KEY_ID or RAZORPAY_KEY_SECRET not set. Razorpay client will not work until these are configured.");
+	console.warn(
+		"[Razorpay] RAZORPAY_KEY_ID or RAZORPAY_KEY_SECRET not set. Razorpay client will not work until these are configured."
+	);
 }
-
 
 // Initialize Razorpay client
 export const razorpayClient = new Razorpay({
-  key_id: keyId || "",
-  key_secret: keySecret || "",
+	key_id: keyId || "",
+	key_secret: keySecret || "",
 });
